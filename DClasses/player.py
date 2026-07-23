@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from game import Game
+from DClasses.game import Game
 
 @dataclass
 class Player:
