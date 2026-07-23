@@ -1,6 +1,6 @@
 from send_msg import send
 from email.message import EmailMessage
-from report import Report
+from DClasses.report import Report
 import os
 
 RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")

@@ -1,4 +1,4 @@
-from report import Report
+from DClasses.report import Report
 import subprocess
 
 def writeHTML(report: Report):

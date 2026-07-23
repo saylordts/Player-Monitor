@@ -1,4 +1,4 @@
-from report import Report
+from DClasses.report import Report
 
 def writeMJML(report: Report):
     header = """

@@ -1,8 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from game import Game
-from report import Report
+from DClasses.game import Game
+from DClasses.report import Report
 
 headers = {
     "User-Agent": (

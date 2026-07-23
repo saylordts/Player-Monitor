@@ -1,14 +1,14 @@
-from report import Report
-from player import Player
+from DClasses.report import Report
+from DClasses.player import Player
 import pandas as pd
 
 def readPlayers():
-    with open("playerList.txt", "r") as file:
+    with open("Data/playerList.txt", "r") as file:
         playerList = file.read().splitlines()
 
     report = Report()
 
-    df = pd.read_csv("players.csv") 
+    df = pd.read_csv("Data/players.csv") 
 
     for playerURL in playerList:
         matching_row = df[df["URL"] == playerURL]
