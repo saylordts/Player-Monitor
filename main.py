@@ -1,5 +1,6 @@
+from playerSaver import savePlayers
 from proballersScraper import proballersScraper
-from playerReadScript import readPlayers
+from playerReader import readPlayers
 from playerWriter import writeMJML
 from mjmlConverter import writeHTML
 from emailSender import sendEmail
@@ -14,6 +15,7 @@ def main(debug=False):
 
     report = writeHTML(report)
 
+    savePlayers(report)
     if not debug:
       sendEmail(report)
 

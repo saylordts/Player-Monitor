@@ -51,13 +51,13 @@ def proballersScraper(report: Report):
             
             game_date = table_drawers[0].a.text.strip()
 
-            game_date_form = datetime.strptime(game_date, "%b %d, %Y")
-            cutoff_date_form = datetime.strptime(player.last_game, "%Y-%m-%d")
+            game_date_form = datetime.strptime(game_date, "%b %d, %Y").date()
+            cutoff_date_form = player.last_game
             
             if game_date_form > cutoff_date_form:
                 player.games.append(
                     Game(
-                        date = game_date,
+                        date = game_date_form,
                         versus_text = table_drawers[1].a.text.strip(),
                         win_loss = table_drawers[3].span.text.strip(),
                         score = table_drawers[4].a.text.strip(),

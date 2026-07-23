@@ -27,7 +27,7 @@ def writeMJML(report: Report):
                   <span style="display: block; width: 100%;">
                     <span style="display: inline-block; width: 70%; vertical-align: middle;">
                       <b style="font-size: 16px; color: #111111; display: block; margin-bottom: 4px;">
-                        {game.date} {game.versus_text}
+                        {game.date.strftime("%b %d, %Y")} {game.versus_text}
                       </b>
                       <span style="font-size: 13px; color: #555555;">
                         {game.pts} PTS | {game.reb} REB ({game.oreb} OFF) | {game.ass} AST | {game.mins} MI

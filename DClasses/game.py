@@ -3,7 +3,7 @@ from datetime import date
 
 @dataclass
 class Game:
-    date: str
+    date: date
     versus_text: str
     win_loss: str
     score: str
