@@ -24,5 +24,9 @@ jobs:
             pip install -r requirements.txt
     
         - name: Run player monitor script
+          env: 
+            EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+            RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+            SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
           run: |
             python main.py
