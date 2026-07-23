@@ -4,12 +4,17 @@ from playerWriter import writeMJML
 from mjmlConverter import writeHTML
 from emailSender import sendEmail
 
-report = readPlayers()
 
-report = proballersScraper(report)
+def main(debug=False):
+    report = readPlayers()
 
-report = writeMJML(report)
+    report = proballersScraper(report)
 
-report = writeHTML(report)
+    report = writeMJML(report)
 
-sendEmail(report)
+    report = writeHTML(report)
+
+    if not debug:
+      sendEmail(report)
+
+main()
