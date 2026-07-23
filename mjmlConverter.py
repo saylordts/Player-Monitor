@@ -11,7 +11,6 @@ def writeHTML(report: Report):
     for player in report.players:
         mjml = mjml+player.mjml
     mjml = mjml+footer
-    print(mjml)
     html = subprocess.run(
         ["node", "mjmlCompiler.js"],
         input=mjml,

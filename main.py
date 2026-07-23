@@ -12,4 +12,4 @@ report = writeMJML(report)
 
 report = writeHTML(report)
 
-# sendEmail(report)
+sendEmail(report)
