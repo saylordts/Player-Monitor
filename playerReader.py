@@ -17,11 +17,8 @@ def readPlayers():
             last_game_unformatted = matching_row["Last Played"].values[0]
         else:
             last_game_unformatted = "1900-01-01"
-            
+
         last_game = date.fromisoformat(last_game_unformatted)
-        
-        last_game_unformatted = "1900-01-01"    # TAKE ME OUT
-        last_game = date.fromisoformat(last_game_unformatted) # TAKE ME OUT
         report.players.append(
             Player(
                 URL = playerURL,

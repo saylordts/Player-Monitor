@@ -19,4 +19,4 @@ def main(debug=False):
     if not debug:
       sendEmail(report)
 
-main(True)
+main()
