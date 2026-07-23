@@ -1,5 +1,3 @@
-from player import Player
-from game import Game
 from report import Report
 
 def writeMJML(report: Report):

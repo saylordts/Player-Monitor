@@ -1,0 +1,9 @@
+{
+  "name": "player-monitor",
+  "version": "1.0.0",
+  "description": "Basketball player monitoring email generator",
+  "main": "mjmlCompiler.js",
+  "dependencies": {
+    "mjml": "^4.15.3"
+  }
+}

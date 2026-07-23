@@ -1,17 +1,38 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from player import Player
 from game import Game
 from report import Report
 
+headers = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 "
+        "Chrome/120 Safari/537.36"
+    ),
+    "Accept": (
+        "text/html,application/xhtml+xml,"
+        "application/xml;q=0.9,image/webp,*/*;q=0.8"
+    ),
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
 def proballersScraper(report: Report):
     for player in report.players:
-        page = requests.get(player.URL, timeout=20)
-        
+        try:
+          page = requests.get(player.URL, headers=headers, timeout=20)
+          page.raise_for_status()
+        except requests.RequestException as e:
+          print(f"Failed to scrape {player.URL}: {e}")
+          continue
         soup = BeautifulSoup(page.content, "html.parser")
 
         identity = soup.find("h1", class_="identity__name")
+
+        if identity is None:
+            raise Exception(
+                f"Could not find player identity page: {player.URL}"
+            )
         first_name = identity.find("span", class_="firstname")
         last_name = identity.find("span", class_="lastname")
         full_name = first_name.text + " " + last_name.text

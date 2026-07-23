@@ -1,8 +1,10 @@
 import smtplib
 import ssl
-from getpass import getpass
+import os
 
-def send(msg, sender_email, debug=True):
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+
+def send(msg, sender_email, debug=False):
     if debug:
         smtp_server = "localhost"
         port = 8025
@@ -12,7 +14,7 @@ def send(msg, sender_email, debug=True):
     else:
         smtp_server = "smtp.gmail.com"
         port = 465
-        password = getpass("Type your password and press enter: ")
+        password = EMAIL_PASSWORD
 
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(

@@ -1,6 +1,5 @@
 from report import Report
 from player import Player
-import csv
 import pandas as pd
 
 def readPlayers():
