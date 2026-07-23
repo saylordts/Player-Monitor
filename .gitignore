@@ -219,3 +219,5 @@ __marimo__/
 
 # My additions
 node_modules/
+players.csv
+playerList.txt
