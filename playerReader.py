@@ -4,25 +4,19 @@ from DClasses.player import Player
 import pandas as pd
 
 def readPlayers():
-    with open("Data/playerList.txt", "r") as file:
-        playerList = file.read().splitlines()
-
+    
     report = Report()
 
-    df = pd.read_csv("Data/players.csv") 
+    db = pd.read_csv("Data/playerLinks.csv")
 
-    for playerURL in playerList:
-        matching_row = df[df["URL"] == playerURL]
-        if not matching_row.empty:
-            last_game_unformatted = matching_row["Last Played"].values[0]
-        else:
-            last_game_unformatted = "1900-01-01"
-
-        last_game = date.fromisoformat(last_game_unformatted)
+    for row in db.itertuples(index=False):
+        name, lastPlayed, proballersLink, flashscoreLink = row
         report.players.append(
             Player(
-                URL = playerURL,
-                last_game = last_game
-                )
+                name=name,
+                last_game=date.fromisoformat(lastPlayed),
+                links={"proballers": proballersLink, "flashscore": flashscoreLink}
             )
+        )
+
     return report

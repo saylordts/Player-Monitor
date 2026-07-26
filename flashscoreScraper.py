@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 from DClasses.game import Game
+from DClasses.player import Player
 from DClasses.report import Report
 import json
 
@@ -28,12 +29,19 @@ gameHeaders = {
 
 dateUrl = "https://www.flashscore.com/player/saylor-daniel/rXu7Cxy3/"  # INPUT
 
-def flashscoreDateScraper():
+def findDates(report: Report):
+    dates_links = []
+    for player in report.players:
+        dates_links.append(findDateOnePlayer(player.links["flashscore"]))
+
+    return dates_links
+
+def findDateOnePlayer(link: str):
     try:
-        page = requests.get(dateUrl, headers=dateHeaders, timeout=20)
+        page = requests.get(link, headers=dateHeaders, timeout=20)
         page.raise_for_status()
     except requests.RequestException as e:
-        print(f"Failed to scrape {dateUrl}: {e}")
+        print(f"Failed to scrape {link}: {e}")
     soup = BeautifulSoup(page.content, "html.parser")
     for script in soup.find_all("script"):
         if "playerProfilePageEnvironment" in script.text:
@@ -48,9 +56,8 @@ def flashscoreDateScraper():
         match["eventStartTime"]: f"https://www.flashscore.com/match/basketball/{match["homeParticipantUrl"]}-{match["homeParticipantEncodedId"]}/{match["awayParticipantUrl"]}-{match["awayParticipantEncodedId"]}/?mid={match["eventEncodedId"]}"
         for match in last_matches
         }
-    print(dates_links)
 
-# flashscoreDateScraper()
+    return dates_links
 
 
 gameUrl = "https://global.flashscore.ninja/2/x/feed/df_psn_1_GrYesG1t" # INPUT
@@ -86,9 +93,3 @@ def flashscoreGameScraper():
     steals = stats[16]
     turnovers = stats[17]
     blk = stats[18]
-
-flashscoreGameScraper()
-
-# response = requests.get(url, headers=headers)
-# print(response.status_code)
-# print(response.text[:500])

@@ -4,18 +4,21 @@ from playerReader import readPlayers
 from playerWriter import writeMJML
 from mjmlConverter import writeHTML
 from emailSender import sendEmail
+from scraperCommander import runScrapers
 
 
-def main(debug=False):
+def main(debug=True):
     report = readPlayers()
 
-    report = proballersScraper(report)
+    report = runScrapers(report)
+    
+    # report = proballersScraper(report)
 
-    report = writeMJML(report)
+    # report = writeMJML(report)
 
-    report = writeHTML(report)
+    # report = writeHTML(report)
 
-    savePlayers(report)
+    # savePlayers(report)
     if not debug:
       sendEmail(report)
 

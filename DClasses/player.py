@@ -4,7 +4,7 @@ from DClasses.game import Game
 
 @dataclass
 class Player:
-    URL: str
+    links: dict[str] = field(default_factory=dict)
     games: list[Game] = field(default_factory=list)
     name: str = "N/A"
     last_game: date = date(1900, 1, 1)
