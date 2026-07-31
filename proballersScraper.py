@@ -17,6 +17,42 @@ headers = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
+
+def findDateOnePlayer(link: str):
+    try:
+        page = requests.get(link, headers=headers, timeout=20)
+        page.raise_for_status()
+    except requests.RequestException as e:
+        print(f"Failed to scrape {link}: {e}")
+    soup = BeautifulSoup(page.content, "html.parser")
+    for script in soup.find_all("script"):
+        if "playerProfilePageEnvironment" in script.text:
+            data = script.text
+            break
+
+    last_five = soup.find(id="regul")
+    table_all = last_five.find(
+        "table", class_="table"
+    )
+    table_body = table_all.tbody
+    table_rows = table_body.find_all("tr")
+    print(table_rows)
+    json_text = data.split("window.playerProfilePageEnvironment = ")[1]
+    json_text = json_text.split(";\n")[0]
+    player_data = json.loads(json_text)
+    last_matches = player_data["lastMatchesData"]["lastMatches"]
+    print(last_matches)
+    dates_links = {
+        match["eventStartTime"]: f"https://www.flashscore.com/match/basketball/{match['homeParticipantUrl']}-{match['homeParticipantEncodedId']}/{match['awayParticipantUrl']}-{match['awayParticipantEncodedId']}/?mid={match['eventEncodedId']}"
+        for match in last_matches
+        }
+
+    return dates_links
+
+
+link = "https://www.proballers.com/basketball/player/299774/daniel-saylor/games"
+print(findDateOnePlayer(link))
+
 def proballersScraper(report: Report):
     for player in report.players:
         try:
@@ -26,20 +62,8 @@ def proballersScraper(report: Report):
           print(f"Failed to scrape {player.URL}: {e}")
           continue
         soup = BeautifulSoup(page.content, "html.parser")
-
-        identity = soup.find("h1", class_="identity__name")
-
-        if identity is None:
-            raise Exception(
-                f"Could not find player identity page: {player.URL}"
-            )
-        first_name = identity.find("span", class_="firstname")
-        last_name = identity.find("span", class_="lastname")
-        full_name = first_name.text + " " + last_name.text
-
-        player.name = full_name
         
-        last_five = soup.find(id="anchor-last5games")
+        last_five = soup.find(id="regul")
         table_all = last_five.find(
             "table", class_="table"
         )

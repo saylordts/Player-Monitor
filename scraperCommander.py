@@ -7,5 +7,7 @@ report = readPlayers()
 
 def runScrapers(report: Report):
     flashscoreDates = fs.findDates(report)
-    for date in flashscoreDates:
-        print(date)
+    for player_dates in flashscoreDates:
+        for date, link in player_dates.items():
+            print(f"Date: {date}, Link: {link}")
+        print("\n")

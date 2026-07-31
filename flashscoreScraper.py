@@ -26,9 +26,6 @@ gameHeaders = {
     "x-fsign": "SW9D1eZo",
 }
 
-
-dateUrl = "https://www.flashscore.com/player/saylor-daniel/rXu7Cxy3/"  # INPUT
-
 def findDates(report: Report):
     dates_links = []
     for player in report.players:
@@ -51,7 +48,7 @@ def findDateOnePlayer(link: str):
     json_text = data.split("window.playerProfilePageEnvironment = ")[1]
     json_text = json_text.split(";\n")[0]
     player_data = json.loads(json_text)
-    last_matches = player_data["lastMatchesData"]["lastMatches"]
+    last_matches = player_data["lastMatchesData"]["lastMatches"][:6]
     dates_links = {
         match["eventStartTime"]: f"https://www.flashscore.com/match/basketball/{match["homeParticipantUrl"]}-{match["homeParticipantEncodedId"]}/{match["awayParticipantUrl"]}-{match["awayParticipantEncodedId"]}/?mid={match["eventEncodedId"]}"
         for match in last_matches
