@@ -4,14 +4,16 @@ import proballersScraper as pb
 from playerReader import readPlayers
 
 
-def runScrapers(report: Report):
+def scraperCommander(report: Report):
     flashscoreDates = fs.findDates(report)
     proballersDates = pb.findDates(report)
     skimmed_fs_dates = dateSkimmer(report, flashscoreDates)
     skimmed_pb_dates = dateSkimmer(report, proballersDates)
 
     playersData = chooseSource(skimmed_fs_dates, skimmed_pb_dates)
-    
+
+    report = runScrapers(report, playersData)
+    return report
 
 
 def dateSkimmer(report: Report, playersData: list):
@@ -35,6 +37,18 @@ def chooseSource(FSData: list, PBData: list):
         playerData.sort(key=lambda x: x["date"])
         playersData.append({"name": pbData["name"], "dates_links": playerData})
     return playersData
-        
 
-
+def runScrapers(report: Report, playersData: list):
+    for player_data in playersData:
+        player_name = player_data["name"]
+        playerIndex = report.getIndexByName(player_name)
+        for date_link in player_data["dates_links"]:
+            if date_link["source"] == "flashscore":
+                game = fs.scrapeOneGame(date_link["link"])
+                if game:
+                    report.players[playerIndex].games.append(game)
+            elif date_link["source"] == "proballers":
+                game = pb.scrapeOneGame(date_link["link"])
+                if game:
+                    report.players[playerIndex].games.append(game)
+    return report

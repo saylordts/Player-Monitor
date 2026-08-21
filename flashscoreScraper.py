@@ -69,33 +69,37 @@ def findDatesOnePlayer(link: str):
 gameUrl = "https://global.flashscore.ninja/2/x/feed/df_psn_1_GrYesG1t" # INPUT
 playerName = "Saylor D." # INPUT
 
-def flashscoreGameScraper():
+def scrapeOneGame(link: str):
     try:
-        page = requests.get(gameUrl, headers=gameHeaders, timeout=20)
+        page = requests.get(link, headers=gameHeaders, timeout=20)
         page.raise_for_status()
     except requests.RequestException as e:
-        print(f"Failed to scrape {gameUrl}: {e}")
+        print(f"Failed to scrape {link}: {e}")
+        return None
     allPlayers = page.text.split("PA÷")[1]
     playerList = allPlayers.split("PJ÷")[1:]
     player = next((p for p in playerList if playerName in p), None)
     stats = player.split("PC÷")[1].split("¬~")[0].split("|")
-    print(stats)
-    pts = stats[0]
-    reb = stats[1]
-    ast = stats[2]
-    min = stats[3]
-    fgm = stats[4]
-    fga = stats[5]
-    twosm = stats[6]
-    twosa = stats[7]
-    threesm = stats[8]
-    threesa = stats[9]
-    ftm = stats[10]
-    fta = stats[11]
-    plusminus = stats[12]
-    oreb = stats[13]
-    dreb = stats[14]
-    fouls = stats[15]
-    steals = stats[16]
-    turnovers = stats[17]
-    blk = stats[18]
+    return     Game(
+            date = "NEED DATE",
+            versus_text = "NEED VERSUS",
+            win_loss = "NEED WIN/LOSS",
+            score = "NEED SCORE",
+            pts = stats[0],
+            reb = stats[1],
+            ass = stats[2],
+            mins = stats[3],
+            twos = f"{stats[6]} - {stats[7]}",
+            threes = f"{stats[8]} - {stats[9]}",
+            fg_pct = "NEED FG%",
+            fts = f"{stats[10]} - {stats[11]}",
+            ft_pct = "NEED FT%",
+            oreb = stats[13],
+            dreb = stats[14],
+            stl = stats[16],
+            to = stats[17],
+            blk = stats[18],
+            pfs = stats[15],
+            plus_minus = stats[12],
+            eff = "NEED EFF"
+            )
