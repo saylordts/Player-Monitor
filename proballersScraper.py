@@ -17,6 +17,14 @@ headers = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
+def findDates(report: Report):
+    players_data = []
+    for player in report.players:
+        player_data = findDateOnePlayer(player.links["proballers"])
+        player_data["name"] = player.name
+        players_data.append(player_data)
+
+    return players_data
 
 def findDateOnePlayer(link: str):
     try:
@@ -24,34 +32,29 @@ def findDateOnePlayer(link: str):
         page.raise_for_status()
     except requests.RequestException as e:
         print(f"Failed to scrape {link}: {e}")
+        return
     soup = BeautifulSoup(page.content, "html.parser")
-    for script in soup.find_all("script"):
-        if "playerProfilePageEnvironment" in script.text:
-            data = script.text
-            break
-
-    last_five = soup.find(id="regul")
+    last_five = soup.find(id="anchor-last5games")
     table_all = last_five.find(
         "table", class_="table"
-    )
+       )
     table_body = table_all.tbody
     table_rows = table_body.find_all("tr")
-    print(table_rows)
-    json_text = data.split("window.playerProfilePageEnvironment = ")[1]
-    json_text = json_text.split(";\n")[0]
-    player_data = json.loads(json_text)
-    last_matches = player_data["lastMatchesData"]["lastMatches"]
-    print(last_matches)
-    dates_links = {
-        match["eventStartTime"]: f"https://www.flashscore.com/match/basketball/{match['homeParticipantUrl']}-{match['homeParticipantEncodedId']}/{match['awayParticipantUrl']}-{match['awayParticipantEncodedId']}/?mid={match['eventEncodedId']}"
-        for match in last_matches
-        }
 
-    return dates_links
+    dates_links = []      
+    for table_row in table_rows:
+        table_drawers = table_row.find_all("td")
+                
+        game_date = datetime.strptime(table_drawers[0].a.text.strip(), "%b %d, %Y").date()           
+        game_link = f"https://www.proballers.com{table_drawers[0].a['href']}"
 
+        dates_links.append({"date": game_date, "link": game_link})
 
-link = "https://www.proballers.com/basketball/player/299774/daniel-saylor/games"
-print(findDateOnePlayer(link))
+    player_data = {
+        "dates_links": dates_links
+    }
+
+    return player_data
 
 def proballersScraper(report: Report):
     for player in report.players:

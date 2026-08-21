@@ -1,0 +1,186 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all padding="0px" />
+      <mj-class name="game-top" background-color="#ffffff" border-radius="8px 8px 0px 0px" />
+      <mj-class name="game-bottom" background-color="#ffffff" border-radius="0px 0px 8px 8px" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f0f0f0">
+<!-- Header -->   
+    <mj-section padding="10px">
+      <mj-column>
+
+        <mj-text align="center">Email Update Jul 24, 2026 </mj-text>
+
+      </mj-column>
+    </mj-section>
+<!-- Player 1 -->       
+    <mj-wrapper padding-left="5%" padding-right="1%" padding-bottom="5px">
+      <mj-section>
+        <mj-column background-color="#ffffff" border-radius="8px">
+
+          <mj-text font-size="24px" font-weight="bold" color="#333333" padding="20px 20px 0px 20px">Daniel Saylor</mj-text>
+          <mj-text font-size="16px" font-weight="bold" color="#333333" padding="10px 20px 20px 40px">Nelson Giants</mj-text>
+
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+<!-- P1G1 -->       
+    <mj-wrapper padding-left="10%" padding-right="1%">
+      <mj-section mj-class="game-top" padding-top="5px" padding-bottom="5px">
+        <mj-group>
+          <mj-column vertical-align="middle" width="75%">
+
+            <mj-text font-size="16px" font-weight="bold" align="center">
+              Jul 5, 2026 @ TAU
+            </mj-text>
+
+          </mj-column>
+          <mj-column vertical-align="middle" width="25%">
+
+            <mj-text font-size="16px" font-weight="bold" align="left">W 73-98</mj-text>
+
+          </mj-column>
+        </mj-group>
+      </mj-section>
+      <mj-section mj-class="game-bottom" padding-bottom="5px">
+        <mj-column padding-left="15px">
+
+          <mj-text color="#555555" padding-top="5px" font-size="13px" align="left">
+            10 PTS | 5 REB (2 OFF) | 0 AST | 15 MI
+          </mj-text>
+
+          <mj-text color="#555555" padding-top="5px" font-size="12px" align="left">
+            2PT 5-8 | 3PT 0-1 | FG&#37; 55.6&#37; | FT 3-4 (75.0&#37;)
+          </mj-text>
+
+          <mj-text color="#555555" padding-top="5px" font-size="12px" align="left">
+            1 STL | 1 BLK | 0 TO | 5 PF | &#177; 2 | EFF 19
+          </mj-text>
+
+        </mj-column>
+      </mj-section>
+<!-- Game Spacer --> 
+      <mj-section><mj-column><mj-spacer height="5px"></mj-spacer></mj-column></mj-section>
+<!-- P1G2 --> 
+      <mj-section mj-class="game-top" padding-top="5px" padding-bottom="5px">
+        <mj-group>
+          <mj-column vertical-align="middle" width="75%">
+
+            <mj-text font-size="16px" font-weight="bold" align="center">
+              Jul 5, 2026 @ TAU
+            </mj-text>
+
+          </mj-column>
+          <mj-column vertical-align="middle" width="25%">
+
+            <mj-text font-size="16px" font-weight="bold" align="left">W 73-98</mj-text>
+
+          </mj-column>
+        </mj-group>
+      </mj-section>
+      <mj-section mj-class="game-bottom" padding-bottom="5px">
+        <mj-column padding-left="15px">
+
+          <mj-text color="#555555" padding-top="5px" font-size="13px" align="left">
+            10 PTS | 5 REB (2 OFF) | 0 AST | 15 MI
+          </mj-text>
+
+          <mj-text color="#555555" padding-top="5px" font-size="12px" align="left">
+            2PT 5-8 | 3PT 0-1 | FG&#37; 55.6&#37; | FT 3-4 (75.0&#37;)
+          </mj-text>
+
+          <mj-text color="#555555" padding-top="5px" font-size="12px" align="left">
+            1 STL | 1 BLK | 0 TO | 5 PF | &#177; 2 | EFF 19
+          </mj-text>
+
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+<!-- Player Spacer -->
+      <mj-section><mj-column><mj-spacer height="10px"></mj-spacer></mj-column></mj-section>
+<!-- Player 2 -->    
+    <mj-wrapper padding-left="5%" padding-right="1%" padding-bottom="5px">
+      <mj-section>
+        <mj-column background-color="#ffffff" border-radius="8px">
+
+          <mj-text font-size="24px" font-weight="bold" color="#333333" padding="20px">CJ Williamson</mj-text>
+
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+    <mj-wrapper padding-left="10%" padding-right="1%">
+<!-- P2G1 -->      
+      <mj-section mj-class="game-top" padding-top="5px" padding-bottom="5px">
+        <mj-group>
+          <mj-column vertical-align="middle" width="75%">
+
+            <mj-text font-size="16px" font-weight="bold" align="center">
+              Jul 5, 2026 @ TAU
+            </mj-text>
+
+          </mj-column>
+          <mj-column vertical-align="middle" width="25%">
+
+            <mj-text font-size="16px" font-weight="bold" align="left">W 73-98</mj-text>
+
+          </mj-column>
+        </mj-group>
+      </mj-section>      
+      <mj-section mj-class="game-bottom" padding-bottom="5px">
+        <mj-column padding-left="15px">
+
+          <mj-text color="#555555" padding-top="5px" font-size="13px" align="left">
+            10 PTS | 5 REB (2 OFF) | 0 AST | 15 MI
+          </mj-text>
+
+          <mj-text color="#555555" padding-top="5px" font-size="12px" align="left">
+            2PT 5-8 | 3PT 0-1 | FG&#37; 55.6&#37; | FT 3-4 (75.0&#37;)
+          </mj-text>
+
+          <mj-text color="#555555" padding-top="5px" font-size="12px" align="left">
+            1 STL | 1 BLK | 0 TO | 5 PF | &#177; 2 | EFF 19
+          </mj-text>
+
+        </mj-column>
+      </mj-section>
+<!-- Game Spacer --> 
+      <mj-section><mj-column><mj-spacer height="5px"></mj-spacer></mj-column></mj-section>
+<!-- P2G2 --> 
+      <mj-section mj-class="game-top" padding-top="5px" padding-bottom="5px">
+        <mj-group>
+          <mj-column vertical-align="middle" width="75%">
+
+            <mj-text font-size="16px" font-weight="bold" align="center">
+              Jul 5, 2026 @ TAU
+            </mj-text>
+
+          </mj-column>
+          <mj-column vertical-align="middle" width="25%">
+
+            <mj-text font-size="16px" font-weight="bold" align="left">W 73-98</mj-text>
+
+          </mj-column>
+        </mj-group>
+      </mj-section>
+      <mj-section mj-class="game-bottom" padding-bottom="5px">
+        <mj-column padding-left="15px">
+
+          <mj-text color="#555555" padding-top="5px" font-size="13px" align="left">
+            10 PTS | 5 REB (2 OFF) | 0 AST | 15 MI
+          </mj-text>
+
+          <mj-text color="#555555" padding-top="5px" font-size="12px" align="left">
+            2PT 5-8 | 3PT 0-1 | FG&#37; 55.6&#37; | FT 3-4 (75.0&#37;)
+          </mj-text>
+
+          <mj-text color="#555555" padding-top="5px" font-size="12px" align="left">
+            1 STL | 1 BLK | 0 TO | 5 PF | &#177; 2 | EFF 19
+          </mj-text>
+
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+  </mj-body>
+</mjml>

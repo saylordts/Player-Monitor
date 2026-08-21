@@ -27,18 +27,21 @@ gameHeaders = {
 }
 
 def findDates(report: Report):
-    dates_links = []
+    players_data = []
     for player in report.players:
-        dates_links.append(findDateOnePlayer(player.links["flashscore"]))
+        player_data = findDatesOnePlayer(player.links["flashscore"])
+        player_data["name"] = player.name
+        players_data.append(player_data)
 
-    return dates_links
+    return players_data
 
-def findDateOnePlayer(link: str):
+def findDatesOnePlayer(link: str):
     try:
         page = requests.get(link, headers=dateHeaders, timeout=20)
         page.raise_for_status()
     except requests.RequestException as e:
         print(f"Failed to scrape {link}: {e}")
+        return {"dates_links": {} }
     soup = BeautifulSoup(page.content, "html.parser")
     for script in soup.find_all("script"):
         if "playerProfilePageEnvironment" in script.text:
@@ -48,13 +51,19 @@ def findDateOnePlayer(link: str):
     json_text = data.split("window.playerProfilePageEnvironment = ")[1]
     json_text = json_text.split(";\n")[0]
     player_data = json.loads(json_text)
-    last_matches = player_data["lastMatchesData"]["lastMatches"][:6]
-    dates_links = {
-        match["eventStartTime"]: f"https://www.flashscore.com/match/basketball/{match["homeParticipantUrl"]}-{match["homeParticipantEncodedId"]}/{match["awayParticipantUrl"]}-{match["awayParticipantEncodedId"]}/?mid={match["eventEncodedId"]}"
-        for match in last_matches
+    last_matches = player_data["lastMatchesData"]["lastMatches"][:5]
+
+    dates_links = []
+    for match in last_matches:
+        dates_links.append({
+            "date": datetime.strptime(match["eventStartTime"], "%y.%m.%d").date(),
+            "link": f"https://www.flashscore.com/match/basketball/{match["homeParticipantUrl"]}-{match["homeParticipantEncodedId"]}/{match["awayParticipantUrl"]}-{match["awayParticipantEncodedId"]}/?mid={match["eventEncodedId"]}"
+        })
+    player_data = {
+        "dates_links": dates_links
         }
 
-    return dates_links
+    return player_data
 
 
 gameUrl = "https://global.flashscore.ninja/2/x/feed/df_psn_1_GrYesG1t" # INPUT
