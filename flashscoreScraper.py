@@ -80,7 +80,7 @@ def scrapeOneGame(link: str):
     playerList = allPlayers.split("PJ÷")[1:]
     player = next((p for p in playerList if playerName in p), None)
     stats = player.split("PC÷")[1].split("¬~")[0].split("|")
-    return     Game(
+    return Game(
             date = "NEED DATE",
             versus_text = "NEED VERSUS",
             win_loss = "NEED WIN/LOSS",

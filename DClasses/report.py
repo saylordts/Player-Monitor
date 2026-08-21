@@ -10,7 +10,7 @@ class Report:
             if player.name == name:
                 return player
         raise ValueError(f"Player with name '{name}' not found in the report.")
-    def getIndexByName(self, name: str) -> int:
+    def getPlayerIndexByName(self, name: str) -> int:
         for index, player in enumerate(self.players):
             if player.name == name:
                 return index
