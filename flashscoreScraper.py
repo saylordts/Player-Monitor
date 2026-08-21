@@ -56,7 +56,7 @@ def findDatesOnePlayer(link: str):
     dates_links = []
     for match in last_matches:
         dates_links.append({
-            "date": datetime.strptime(match["eventStartTime"], "%y.%m.%d").date(),
+            "date": datetime.strptime(match["eventStartTime"], "%d.%m.%y").date(),
             "link": f"https://www.flashscore.com/match/basketball/{match["homeParticipantUrl"]}-{match["homeParticipantEncodedId"]}/{match["awayParticipantUrl"]}-{match["awayParticipantEncodedId"]}/?mid={match["eventEncodedId"]}"
         })
     player_data = {
