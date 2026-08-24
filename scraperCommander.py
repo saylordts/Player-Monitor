@@ -44,12 +44,13 @@ def runScrapers(report: Report, playersData: list):
         player_name = player_data["name"]
         playerIndex = report.getPlayerIndexByName(player_name)
         for date_link in player_data["dates_links"]:
+            print(date_link["link"])
             if date_link["source"] == "flashscore":
                 game = fs.scrapeOneGame(date_link["link"])
                 if game:
                     report.players[playerIndex].games.append(game)
             elif date_link["source"] == "proballers":
-                game = pb.scrapeOneGame(date_link["link"])
+                game = pb.scrapeOneGame(date_link["link"],report.players[playerIndex])
                 if game:
                     report.players[playerIndex].games.append(game)
     return report

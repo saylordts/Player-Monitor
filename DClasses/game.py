@@ -3,10 +3,10 @@ from datetime import date
 
 @dataclass
 class Game:
-    date: date
-    versus_text: str
-    win_loss: str
-    score: str
+    date: date # datetime.strptime(unf_date, "%b %d, %Y").date()
+    versus_text: str # @ ...
+    win_loss: str # W
+    score: str 
     pts: str
     reb: str
     ass: str
