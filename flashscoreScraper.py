@@ -57,17 +57,13 @@ def findDatesOnePlayer(link: str):
     for match in last_matches:
         dates_links.append({
             "date": datetime.strptime(match["eventStartTime"], "%d.%m.%y").date(),
-            "link": f"https://www.flashscore.com/match/basketball/{match["homeParticipantUrl"]}-{match["homeParticipantEncodedId"]}/{match["awayParticipantUrl"]}-{match["awayParticipantEncodedId"]}/?mid={match["eventEncodedId"]}"
+            "link": f"https://www.flashscore.com/match/basketball/{match["homeParticipantUrl"]}-{match["homeParticipantEncodedId"]}/{match["awayParticipantUrl"]}-{match["awayParticipantEncodedId"]}/summary/player-stats/overall/?mid={match["eventEncodedId"]}"
         })
     player_data = {
         "dates_links": dates_links
         }
 
     return player_data
-
-
-gameUrl = "https://global.flashscore.ninja/2/x/feed/df_psn_1_GrYesG1t" # INPUT
-playerName = "Saylor D." # INPUT
 
 def scrapeOneGame(link: str):
     try:
@@ -103,3 +99,5 @@ def scrapeOneGame(link: str):
             plus_minus = stats[12],
             eff = "NEED EFF"
             )
+
+scrapeOneGame("https://www.flashscore.com/match/basketball/nelson-giants-n5zAOXyC/taranaki-airs-E7KpSFxm/summary/player-stats/overall/?mid=Wl2sEdR0")
