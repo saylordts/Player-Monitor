@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import date
-from DClasses.game import Game
+from _DClasses.game import Game
 
 @dataclass
 class Player:

@@ -1,4 +1,4 @@
-from DClasses.report import Report
+from _DClasses.report import Report
 import subprocess
 
 def writeHTML(report: Report):
@@ -12,7 +12,7 @@ def writeHTML(report: Report):
         mjml = mjml+player.mjml
     mjml = mjml+footer
     html = subprocess.run(
-        ["node", "mjmlCompiler.js"],
+        ["node", "_3_Write_Report/mjmlCompiler.js"],
         input=mjml,
         text=True,
         capture_output=True,

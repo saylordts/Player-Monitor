@@ -1,9 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from DClasses.game import Game
-from DClasses.player import Player
-from DClasses.report import Report
+from _DClasses.game import Game
+from _DClasses.player import Player
+from _DClasses.report import Report
 import json
 
 dateHeaders = {

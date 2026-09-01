@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from DClasses.player import Player
+from _DClasses.player import Player
 
 @dataclass
 class Report:
