@@ -13,7 +13,6 @@ def scraperCommander(report: Report):
     playersData = chooseSource(skimmed_fs_dates, skimmed_pb_dates)
 
     report = runScrapers(report, playersData)
-    print(report)
     return report
 
 
@@ -45,8 +44,7 @@ def runScrapers(report: Report, playersData: list):
         playerIndex = report.getPlayerIndexByName(player_name)
         for date_link in player_data["dates_links"]:
             if date_link["source"] == "flashscore":
-                print(date_link["link"])
-                game = fs.scrapeOneGame(date_link["link"])
+                game = fs.scrapeOneGame(date_link["link"], report.players[playerIndex])
                 if game:
                     report.players[playerIndex].games.append(game)
             elif date_link["source"] == "proballers":

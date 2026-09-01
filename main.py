@@ -10,16 +10,13 @@ def main(debug=True):
     report = readPlayers()
 
     report = scraperCommander(report)
-    
-    # report = proballersScraper(report)
 
-    # report = writeMJML(report)
+    report = writeMJML(report)
 
-    # report = writeHTML(report)
+    report = writeHTML(report)
 
-    # savePlayers(report)
-
-    # if not debug:
-    #   sendEmail(report)
+    if not debug:
+      savePlayers(report)
+      sendEmail(report)
 
 main()

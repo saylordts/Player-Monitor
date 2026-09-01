@@ -1,5 +1,3 @@
-from re import match
-
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -23,6 +21,15 @@ dateHeaders = {
 gameHeaders = {
     "Referer": "https://www.flashscore.com/",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+    "x-fsign": "SW9D1eZo",
+}
+headers = {
+    "accept": "*/*",
+    "origin": "https://www.flashscore.com",
+    "referer": "https://www.flashscore.com/",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                  "AppleWebKit/537.36 (KHTML, like Gecko) "
+                  "Chrome/152.0.0.0 Safari/537.36",
     "x-fsign": "SW9D1eZo",
 }
 
@@ -57,6 +64,7 @@ def findDatesOnePlayer(link: str):
     for match in last_matches:
         dates_links.append({
             "date": datetime.strptime(match["eventStartTime"], "%d.%m.%y").date(),
+            #"link": f"https://2.flashscore.ninja/2/x/feed/df_psn_1_{match['eventEncodedId']}"
             "link": f"https://www.flashscore.com/match/basketball/{match["homeParticipantUrl"]}-{match["homeParticipantEncodedId"]}/{match["awayParticipantUrl"]}-{match["awayParticipantEncodedId"]}/summary/player-stats/overall/?mid={match["eventEncodedId"]}"
         })
     player_data = {
@@ -65,20 +73,37 @@ def findDatesOnePlayer(link: str):
 
     return player_data
 
-def scrapeOneGame(link: str):
+def scrapeOneGame(link: str, player: Player):
     try:
-        page = requests.get(link, headers=gameHeaders, timeout=20)
-        page.raise_for_status()
+        basicPage = requests.get(link, headers=gameHeaders, timeout=20)
+        basicPage.raise_for_status()
     except requests.RequestException as e:
         print(f"Failed to scrape {link}: {e}")
         return None
-    allPlayers = page.text.split("PA÷")[1]
+    try:
+        matchID = link.split("mid=")[1]
+        data_link = f"https://2.flashscore.ninja/2/x/feed/df_psn_1_{matchID}"
+        playerPage = requests.get(data_link, headers=gameHeaders, timeout=20)
+        playerPage.raise_for_status()
+    except requests.RequestException as e:
+        print(f"Failed to scrape {link}: {e}")
+        return None
+    
+    playerID = player.links["flashscore"].split("/")[-1]
+    allPlayers = playerPage.text.split("PA÷")[1]
     playerList = allPlayers.split("PJ÷")[1:]
-    player = next((p for p in playerList if playerName in p), None)
-    stats = player.split("PC÷")[1].split("¬~")[0].split("|")
+    playerdata = next((p for p in playerList if playerID in p), None)
+    stats = playerdata.split("PC÷")[1].split("¬~")[0].split("|")
+
+    soup = BeautifulSoup(basicPage.content, "html.parser")
+    title = soup.find("title").text
+    unf_date = title.split(",")[0][-10:]
+    game_date_form = datetime.strptime(unf_date, "%d/%m/%Y").date()
+    versus_text = title.split(",")[0][:-11].strip()
+
     return Game(
-            date = "NEED DATE",
-            versus_text = "NEED VERSUS",
+            date = game_date_form,
+            versus_text = versus_text,
             win_loss = "NEED WIN/LOSS",
             score = "NEED SCORE",
             pts = stats[0],
@@ -99,5 +124,3 @@ def scrapeOneGame(link: str):
             plus_minus = stats[12],
             eff = "NEED EFF"
             )
-
-scrapeOneGame("https://www.flashscore.com/match/basketball/nelson-giants-n5zAOXyC/taranaki-airs-E7KpSFxm/summary/player-stats/overall/?mid=Wl2sEdR0")
