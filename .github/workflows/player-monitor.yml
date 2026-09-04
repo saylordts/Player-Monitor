@@ -43,6 +43,11 @@ jobs:
           run: |
             python main.py --no-debug
 
+        - name: Check for updated player data
+          run: |
+            git status
+            git diff -- _Data/playerLinks.csv
+
         - name: Commit updated player data
           run: |
             git config --global user.name "github-actions[bot]"
@@ -50,5 +55,6 @@ jobs:
 
             git add _Data/playerLinks.csv
 
-            git diff --cached --quiet || git commit -m "Update player data"
+            git diff --cached --quiet
+            git commit -m "Update player data"
             git push
