@@ -12,4 +12,4 @@ def savePlayers(report):
         else:
             new_row = pd.DataFrame([[player.name, last_game.isoformat()]], columns=columns)
             df = pd.concat([df, new_row], ignore_index=True)
-    df.to_csv("_Data/players.csv", index=False)
+    df.to_csv("_Data/playerLinks.csv", index=False)
