@@ -88,24 +88,48 @@ def scrapeOneGame(link: str, player: Player):
     except requests.RequestException as e:
         print(f"Failed to scrape {link}: {e}")
         return None
-    
-    playerID = player.links["flashscore"].split("/")[-1]
-    allPlayers = playerPage.text.split("PA÷")[1]
-    playerList = allPlayers.split("PJ÷")[1:]
-    playerdata = next((p for p in playerList if playerID in p), None)
+    playerID = player.links["flashscore"].split("/")[-2]
+    allPlayers = playerPage.text.split("PA÷")
+    homePlayers = allPlayers[1].split("PJ÷")[1:]
+    awayPlayers = allPlayers[2].split("PJ÷")[1:]
+
+    playerdata = next((p for p in homePlayers if playerID in p), None)
+    if playerdata is None:
+        home = False
+        playerdata = next((p for p in awayPlayers if playerID in p), None)
+    else: 
+        home = True
     stats = playerdata.split("PC÷")[1].split("¬~")[0].split("|")
 
     soup = BeautifulSoup(basicPage.content, "html.parser")
+
     title = soup.find("title").text
     unf_date = title.split(",")[0][-10:]
     game_date_form = datetime.strptime(unf_date, "%d/%m/%Y").date()
     versus_text = title.split(",")[0][:-11].strip()
 
+    title_score = soup.find(
+       "meta", property="og:title"
+        )
+    score = title_score["content"].rsplit(" ", 1)[-1]
+
+    if home:
+        if score.split("-")[0] > score.split("-")[1]:
+            win_loss = "W"
+        else:
+            win_loss = "L"
+    else:
+        if score.split("-")[1] > score.split("-")[0]:
+            win_loss = "W"
+        else:
+            win_loss = "L"
+
+
     return Game(
             date = game_date_form,
             versus_text = versus_text,
-            win_loss = "NEED WIN/LOSS",
-            score = "NEED SCORE",
+            win_loss = win_loss,
+            score = score,
             pts = stats[0],
             reb = stats[1],
             ass = stats[2],

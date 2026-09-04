@@ -4,6 +4,7 @@ from _3_Write_Report.playerWriter import writeMJML
 from _3_Write_Report.mjmlConverter import writeHTML
 from _4_Send_Emails.emailSender import sendEmail
 from _5_Save_Results.playerSaver import savePlayers
+import argparse
 
 def main(debug=True):
     report = readPlayers()
@@ -18,4 +19,13 @@ def main(debug=True):
       savePlayers(report)
       sendEmail(report)
 
-main()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--no-debug",
+        action="store_true",
+        help="Disable debug mode"
+    )
+    args = parser.parse_args()
+
+    main(debug=not args.no_debug)
