@@ -5,6 +5,9 @@ on:
         - cron: "0 8 * * 0"
     workflow_dispatch:
 
+permissions:
+    contents: write
+
 jobs:
     player-monitor:
         runs-on: ubuntu-latest
@@ -39,3 +42,13 @@ jobs:
             SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
           run: |
             python main.py --no-debug
+
+        - name: Commit updated player data
+          run: |
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+            git add _Data/playerLinks.csv
+
+            git diff --cached --quiet || git commit -m "Update player data"
+            git push
