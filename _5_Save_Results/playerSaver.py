@@ -1,7 +1,7 @@
 import pandas as pd
 
 def savePlayers(report):
-    df = pd.read_csv("Data/players.csv")
+    df = pd.read_csv("_Data/players.csv")
     columns = df.columns.tolist()
     for player in report.players:
         last_game = max([game.date for game in player.games])
@@ -12,4 +12,4 @@ def savePlayers(report):
         else:
             new_row = pd.DataFrame([[player.URL, last_game.isoformat()]], columns=columns)
             df = pd.concat([df, new_row], ignore_index=True)
-    df.to_csv("Data/players.csv", index=False)
+    df.to_csv("_Data/players.csv", index=False)
