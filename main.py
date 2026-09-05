@@ -1,8 +1,8 @@
-from _1_Read_In_Players.playerReader import readPlayers
+from _1_Read_In_Players.readPlayers import readPlayers
 from _2_Run_Scrapers.scraperCommander import scraperCommander
 from _3_Write_Report.writeReport import writeReport
-from _4_Send_Emails.emailSender import sendEmail
-from _5_Save_Results.playerSaver import savePlayers
+from _4_Send_Emails.sendEmail import sendEmail
+from _5_Save_Results.savePlayers import savePlayers
 import argparse
 
 def main(debug=True):

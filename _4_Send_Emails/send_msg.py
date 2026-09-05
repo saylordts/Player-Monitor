@@ -4,7 +4,7 @@ import os
 
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
-def send(msg, sender_email, debug=False):
+def send_msg(msg, sender_email, debug=False):
     if debug:
         smtp_server = "localhost"
         port = 8025

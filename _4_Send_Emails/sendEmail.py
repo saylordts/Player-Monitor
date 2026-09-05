@@ -1,4 +1,4 @@
-from _4_Send_Emails.send_msg import send
+from _4_Send_Emails.send_msg import send_msg
 from email.message import EmailMessage
 from _DClasses.report import Report
 import os
@@ -26,4 +26,4 @@ Please view this email in an HTML-supported email client.
     msg.set_content(text)
     msg.add_alternative(html, subtype="html")
 
-    send(msg, sender_email, False)
+    send_msg(msg, sender_email, False)

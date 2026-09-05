@@ -1,7 +1,6 @@
 from _DClasses.report import Report
 import _2_Run_Scrapers.flashscoreScraper as fs
 import _2_Run_Scrapers.proballersScraper as pb
-from _1_Read_In_Players.playerReader import readPlayers
 
 
 def scraperCommander(report: Report):
