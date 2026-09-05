@@ -9,7 +9,7 @@ class Game:
     score: str 
     pts: str
     reb: str
-    ass: str
+    ast: str
     mins: str
     twos: str
     threes: str

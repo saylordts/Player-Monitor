@@ -122,7 +122,7 @@ def scrapeOneGame(link: str, player: Player):
             score = score,
             pts = table_drawers[2].text.strip(),
             reb = table_drawers[3].text.strip(),
-            ass = table_drawers[4].text.strip(),
+            ast = table_drawers[4].text.strip(),
             mins = table_drawers[5].text.strip(),
             twos = table_drawers[6].text.strip(),
             threes = table_drawers[7].text.strip(),

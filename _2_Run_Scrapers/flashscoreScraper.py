@@ -131,7 +131,7 @@ def scrapeOneGame(link: str, player: Player):
             score = score,
             pts = stats[0],
             reb = stats[1],
-            ass = stats[2],
+            ast = stats[2],
             mins = stats[3],
             twos = f"{stats[6]} - {stats[7]}",
             threes = f"{stats[8]} - {stats[9]}",
