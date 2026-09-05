@@ -5,11 +5,15 @@ import _2_Run_Scrapers.proballersScraper as pb
 
 def scraperCommander(report: Report):
     flashscoreDates = fs.findDates(report)
-    proballersDates = pb.findDates(report)
+    proballersDates, playerTeams = pb.findDates(report)
     skimmed_fs_dates = dateSkimmer(report, flashscoreDates)
     skimmed_pb_dates = dateSkimmer(report, proballersDates)
 
     playersData = chooseSource(skimmed_fs_dates, skimmed_pb_dates)
+
+    for i, player_data in enumerate(playersData):
+        player_name = player_data["name"]
+        report.getPlayerByName(player_name).team = playerTeams[i]
 
     report = runScrapers(report, playersData)
     return report

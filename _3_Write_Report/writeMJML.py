@@ -58,7 +58,7 @@ def singleGame(game:Game):
         <mj-group>
           <mj-column vertical-align="middle" width="75%">
             <mj-text font-size="16px" font-weight="bold" align="center">
-              {game.date.strftime("%B %d, %Y")} {game.versus_text}
+              {game.date.strftime("%b %d, %Y")} {game.versus_text}
             </mj-text>
           </mj-column>
           <mj-column vertical-align="middle" width="25%">

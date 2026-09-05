@@ -20,12 +20,14 @@ headers = {
 
 def findDates(report: Report):
     players_data = []
+    player_teams = []
     for player in report.players:
-        player_data = findDateOnePlayer(player.links["proballers"])
+        player_data, player_team = findDateOnePlayer(player.links["proballers"])
         player_data["name"] = player.name
         players_data.append(player_data)
+        player_teams.append(player_team)
 
-    return players_data
+    return players_data, player_teams
 
 def findDateOnePlayer(link: str):
     try:
@@ -55,7 +57,9 @@ def findDateOnePlayer(link: str):
         "dates_links": dates_links
     }
 
-    return player_data
+    player_team = soup.find("div", class_="banner__biography__content").p.a.text
+
+    return player_data, player_team
 
 def scrapeOneGame(link: str, player: Player):
     try:
