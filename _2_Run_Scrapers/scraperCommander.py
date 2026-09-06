@@ -34,6 +34,7 @@ def chooseSource(FSData: list, PBData: list):
         for playerdata in playerData:
             playerdata["source"] = "proballers"
         for date_link in fsData["dates_links"]:
+#            if date_link["date"] not in [pd["date"] for pd in playerData]:  # REVERT WHEN FLASHSCORE LEGITIMIZED
             if date_link not in playerData:
                 date_link["source"] = "flashscore"
                 playerData.append(date_link)
