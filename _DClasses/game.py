@@ -24,5 +24,5 @@ class Game:
     pfs: str
     plus_minus: str
     eff: str
-    
-    
+    gameSource: str = "N/A" 
+    gameData: dict = None

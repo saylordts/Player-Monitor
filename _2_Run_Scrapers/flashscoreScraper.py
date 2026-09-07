@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from _DClasses.flashscoreData import FlashscoreData
 from _DClasses.game import Game
 from _DClasses.player import Player
 from _DClasses.report import Report
@@ -89,8 +90,8 @@ def scrapeOneGame(link: str, player: Player):
         return None
     playerID = player.links["flashscore"].split("/")[-2]
     allPlayers = playerPage.text.split("PA÷")
-    homePlayers = allPlayers[1].split("PJ÷")[1:]
-    awayPlayers = allPlayers[2].split("PJ÷")[1:]
+    homePlayers = allPlayers[2].split("PJ÷")[1:]
+    awayPlayers = allPlayers[3].split("PJ÷")[1:]
 
     playerdata = next((p for p in homePlayers if playerID in p), None)
     if playerdata is None:
@@ -103,8 +104,7 @@ def scrapeOneGame(link: str, player: Player):
     soup = BeautifulSoup(basicPage.content, "html.parser")
 
     title = soup.find("title").text
-    unf_date = title.split(",")[0][-10:]
-    game_date_form = datetime.strptime(unf_date, "%d/%m/%Y").date()
+    date = title.split(",")[0][-10:]
     versus_text = title.split(",")[0][:-11].strip()
 
     title_score = soup.find(
@@ -112,38 +112,33 @@ def scrapeOneGame(link: str, player: Player):
         )
     score = title_score["content"].rsplit(" ", 1)[-1]
 
-    if home:
-        if score.split("-")[0] > score.split("-")[1]:
-            win_loss = "W"
-        else:
-            win_loss = "L"
-    else:
-        if score.split("-")[1] > score.split("-")[0]:
-            win_loss = "W"
-        else:
-            win_loss = "L"
+    game = FlashscoreData(
+        pts = stats[0],
+        reb = stats[1],
+        ast = stats[2],
+        min = stats[3],
+        fgMade = stats[4],
+        fgAtt = stats[5],
+        twosMade = stats[6],
+        twosAtt = stats[7],
+        threesMade = stats[8],
+        threesAtt = stats[9],
+        ftMade = stats[10],
+        ftAtt = stats[11],
+        plus_minus = stats[12],
+        oreb = stats[13],
+        dreb = stats[14],
+        pfs = stats[15],
+        stl = stats[16],
+        to = stats[17],
+        blk = stats[18],
+        blka = stats[19],
+        date = date,
+        versus_text = versus_text,
+        score = score,
+        home = home
+    ).toGame()
 
+    print(game)
 
-    return Game(
-            date = game_date_form,
-            versus_text = versus_text,
-            win_loss = win_loss,
-            score = score,
-            pts = stats[0],
-            reb = stats[1],
-            ast = stats[2],
-            mins = stats[3],
-            twos = f"{stats[6]} - {stats[7]}",
-            threes = f"{stats[8]} - {stats[9]}",
-            fg_pct = "NEED FG%",
-            fts = f"{stats[10]} - {stats[11]}",
-            ft_pct = "NEED FT%",
-            oreb = stats[13],
-            dreb = stats[14],
-            stl = stats[16],
-            to = stats[17],
-            blk = stats[18],
-            pfs = stats[15],
-            plus_minus = stats[12],
-            eff = "NEED EFF"
-            )
+    return game
