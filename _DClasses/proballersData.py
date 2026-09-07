@@ -4,19 +4,16 @@ from datetime import date, datetime
 from _DClasses.game import Game
 
 @dataclass
-class FlashscoreData:
+class ProballersData:
     pts: str
     reb: str
     ast: str
     min: str
-    fgMade: str
-    fgAtt: str
-    twosMade: str
-    twosAtt: str
-    threesMade: str
-    threesAtt: str
-    ftMade: str
-    ftAtt: str
+    twos: str
+    threes: str
+    fg_pct: str
+    fts: str
+    ft_pct: str
     plus_minus: str
     oreb: str
     dreb: str
@@ -24,8 +21,8 @@ class FlashscoreData:
     stl: str
     to: str
     blk: str
-    blka: str
-    date: str
+    eff: str
+    date: date
     versus_text: str
     score: str
     home: bool

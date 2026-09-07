@@ -139,6 +139,4 @@ def scrapeOneGame(link: str, player: Player):
         home = home
     ).toGame()
 
-    print(game)
-
     return game

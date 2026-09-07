@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from _DClasses.game import Game
 from _DClasses.player import Player
+from _DClasses.proballersData import ProballersData
 from _DClasses.report import Report
 
 headers = {
@@ -118,6 +119,37 @@ def scrapeOneGame(link: str, player: Player):
         versus_text = f"vs {opp_name}"
 
     game_date_form = datetime.strptime(unf_date, "%b %d, %Y").date()
+
+    form_table_drawers = [table_drawer.text.strip() for table_drawer in table_drawers]
+
+    print(form_table_drawers)
+
+    game = ProballersData(
+        date = game_date_form,
+        versus_text = versus_text,
+        score = score,
+        home = home,
+        pts = table_drawers[1].text.strip(),
+        reb = table_drawers[2].text.strip(),
+        ast = table_drawers[3].text.strip(),
+        min = table_drawers[4].text.strip(),
+        twos = table_drawers[5].text.strip(),
+        threes = table_drawers[6].text.strip(),
+        fg_pct = table_drawers[7].text.strip().replace("%", "&#37;"),
+        fts = table_drawers[8].text.strip(),
+        ft_pct = table_drawers[9].text.strip().replace("%", "&#37;"),
+        oreb = table_drawers[10].text.strip(),
+        dreb = table_drawers[11].text.strip(),
+        to = table_drawers[14].text.strip(),
+        stl = table_drawers[15].text.strip(),
+        blk = table_drawers[16].text.strip(),
+        pfs = table_drawers[17].text.strip(),
+        plus_minus = table_drawers[19].text.strip(),
+        eff = table_drawers[20].text.strip()
+    )
+
+    print(game)
+    print()
 
     return Game(
             date = game_date_form,
