@@ -4,8 +4,11 @@ import _2_Run_Scrapers.proballersScraper as pb
 
 
 def scraperCommander(report: Report):
-    flashscoreDates = fs.findDates(report)
-    proballersDates, playerTeams = pb.findDates(report)
+    flashscoreDates, flashscoreErrors = fs.findDates(report)
+    proballersDates, playerTeams,proballersErrors = pb.findDates(report)
+    for player in proballersErrors and player in flashscoreErrors:
+        report.players[report.getPlayerIndexByName(player.name)].handling
+
     skimmed_fs_dates = dateSkimmer(report, flashscoreDates)
     skimmed_pb_dates = dateSkimmer(report, proballersDates)
 

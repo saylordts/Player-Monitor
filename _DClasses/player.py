@@ -10,3 +10,4 @@ class Player:
     team: str = "N/A"
     last_game: date = date(1900, 1, 1)
     mjml: str = ""
+    handling: dict

@@ -36,12 +36,16 @@ headers = {
 
 def findDates(report: Report):
     players_data = []
+    errors = []
     for player in report.players:
-        player_data = findDatesOnePlayer(player.links["flashscore"])
-        player_data["name"] = player.name
-        players_data.append(player_data)
+        try:
+            player_data = findDatesOnePlayer(player.links["flashscore"])
+            player_data["name"] = player.name
+            players_data.append(player_data)
+        except ValueError:
+            errors.append(player)
 
-    return players_data
+    return players_data, errors
 
 def findDatesOnePlayer(link: str):
     try:
@@ -49,7 +53,7 @@ def findDatesOnePlayer(link: str):
         page.raise_for_status()
     except requests.RequestException as e:
         print(f"Failed to scrape {link}: {e}")
-        return {"dates_links": {} }
+        raise ValueError()
     soup = BeautifulSoup(page.content, "html.parser")
     for script in soup.find_all("script"):
         if "playerProfilePageEnvironment" in script.text:

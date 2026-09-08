@@ -22,11 +22,15 @@ headers = {
 def findDates(report: Report):
     players_data = []
     player_teams = []
+    errors = []
     for player in report.players:
-        player_data, player_team = findDateOnePlayer(player.links["proballers"])
-        player_data["name"] = player.name
-        players_data.append(player_data)
-        player_teams.append(player_team)
+        try:
+            player_data, player_team = findDateOnePlayer(player.links["proballers"])
+            player_data["name"] = player.name
+            players_data.append(player_data)
+            player_teams.append(player_team)
+        except requests.RequestException as e:
+            report.errors += f"Failed to scrape {player.links["proballers"]}: {e}"
 
     return players_data, player_teams
 
@@ -36,7 +40,7 @@ def findDateOnePlayer(link: str):
         page.raise_for_status()
     except requests.RequestException as e:
         print(f"Failed to scrape {link}: {e}")
-        return
+        raise
     soup = BeautifulSoup(page.content, "html.parser")
     last_five = soup.find(id="anchor-last5games")
     table_all = last_five.find(
