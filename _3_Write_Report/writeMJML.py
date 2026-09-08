@@ -17,9 +17,6 @@ def writeMJML(report: Report):
     if playerIndex < len(report.players) - 1:
       mjml += playerSpacer()
   mjml += footer()
-
-  with open("__0_Testing/report.html", "w") as f:
-      f.write(mjml)
             
   return mjml
 
