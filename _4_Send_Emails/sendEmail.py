@@ -2,6 +2,9 @@ from _4_Send_Emails.send_msg import send_msg
 from email.message import EmailMessage
 from _DClasses.report import Report
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
 SENDER_EMAIL = os.getenv("SENDER_EMAIL")
