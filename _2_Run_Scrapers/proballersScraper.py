@@ -75,16 +75,14 @@ def scrapeOneGame(link: str, player: Player):
        )
     teams = team_info.div.find_all("div", class_="row")
     home = True
-    table_drawers = []
-    for team in teams:
-        table = team.table.tbody
-        rows = table.find_all("tr")
+    for teamIndex, team in enumerate(teams):
+        rows = team.table.tbody.find_all("tr")
         for row in rows:
             row_player = row.find("td", class_="left first__left d-flex align-items-center").a.text.strip()
             if row_player == player.name:
                 table_drawers = row.find_all("td")
-                break
-        home = False
+                home = True if teamIndex == 0 else False
+
     if table_drawers == []:
         print(f"Player {player.name} not found in game {link}")
         return None
@@ -92,85 +90,39 @@ def scrapeOneGame(link: str, player: Player):
     game_info = soup.find(
         "div", class_="home-game__content__result__final-score__score"
         )
-    unf_date = game_info.find("span", class_="date").text.strip()
+    date = game_info.find("span", class_="date").text.strip()
     score = game_info.find("span", class_="score").text.strip()
-    score_split = score.split("-")
-
-    if home:
-        if score_split[0] > score_split[1]:
-            win_loss = "W"
-    elif score_split[1] > score_split[0]:
-            win_loss = "W"
-    else:
-        win_loss = "L"
 
     team_info = soup.find(
         "div", class_="home-game__content__result__final-score__content"
     )
-    if home:
-        opp_name = team_info.find(
-        "div", class_="home-game__content__result__final-score__team"
-        ).h2.a.text.strip()
-        versus_text = f"@ {opp_name}"
-    else:
-        opp_name = team_info.find(
-        "div", class_="home-game__content__result__final-score__team home-game__content__result__final-score__team--right"
-        ).h2.a.text.strip()
-        versus_text = f"vs {opp_name}"
+    team_arg = "home-game__content__result__final-score__team home-game__content__result__final-score__team--right" if home else "home-game__content__result__final-score__team"
+    opp_team = team_info.find("div", class_=team_arg).h2.a.text.strip()
 
-    game_date_form = datetime.strptime(unf_date, "%b %d, %Y").date()
-
-    form_table_drawers = [table_drawer.text.strip() for table_drawer in table_drawers]
-
-    print(form_table_drawers)
+    table_drawers = [table_drawer.text.strip() for table_drawer in table_drawers]
 
     game = ProballersData(
-        date = game_date_form,
-        versus_text = versus_text,
+        date = date,
+        opp_team = opp_team,
         score = score,
         home = home,
-        pts = table_drawers[1].text.strip(),
-        reb = table_drawers[2].text.strip(),
-        ast = table_drawers[3].text.strip(),
-        min = table_drawers[4].text.strip(),
-        twos = table_drawers[5].text.strip(),
-        threes = table_drawers[6].text.strip(),
-        fg_pct = table_drawers[7].text.strip().replace("%", "&#37;"),
-        fts = table_drawers[8].text.strip(),
-        ft_pct = table_drawers[9].text.strip().replace("%", "&#37;"),
-        oreb = table_drawers[10].text.strip(),
-        dreb = table_drawers[11].text.strip(),
-        to = table_drawers[14].text.strip(),
-        stl = table_drawers[15].text.strip(),
-        blk = table_drawers[16].text.strip(),
-        pfs = table_drawers[17].text.strip(),
-        plus_minus = table_drawers[19].text.strip(),
-        eff = table_drawers[20].text.strip()
-    )
+        pts = table_drawers[1],
+        reb = table_drawers[2],
+        ast = table_drawers[3],
+        min = table_drawers[4],
+        twos = table_drawers[5],
+        threes = table_drawers[6],
+        fg_pct = table_drawers[7].replace("%", "&#37;"),
+        fts = table_drawers[8],
+        ft_pct = table_drawers[9].replace("%", "&#37;"),
+        oreb = table_drawers[10],
+        dreb = table_drawers[11],
+        to = table_drawers[14],
+        stl = table_drawers[15],
+        blk = table_drawers[16],
+        pfs = table_drawers[17],
+        plus_minus = table_drawers[19],
+        eff = table_drawers[20]
+    ).toGame()
 
-    print(game)
-    print()
-
-    return Game(
-            date = game_date_form,
-            versus_text = versus_text,
-            win_loss = win_loss,
-            score = score,
-            pts = table_drawers[2].text.strip(),
-            reb = table_drawers[3].text.strip(),
-            ast = table_drawers[4].text.strip(),
-            mins = table_drawers[5].text.strip(),
-            twos = table_drawers[6].text.strip(),
-            threes = table_drawers[7].text.strip(),
-            fg_pct = table_drawers[8].text.strip().replace("%", "&#37;"),
-            fts = table_drawers[9].text.strip(),
-            ft_pct = table_drawers[10].text.strip().replace("%", "&#37;"),
-            oreb = table_drawers[11].text.strip(),
-            dreb = table_drawers[12].text.strip(),
-            stl = table_drawers[16].text.strip(),
-            to = table_drawers[15].text.strip(),
-            blk = table_drawers[16].text.strip(),
-            pfs = table_drawers[17].text.strip(),
-            plus_minus = table_drawers[19].text.strip(),
-            eff = table_drawers[20].text.strip()
-            )
+    return game

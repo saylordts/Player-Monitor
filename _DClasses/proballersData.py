@@ -23,7 +23,7 @@ class ProballersData:
     blk: str
     eff: str
     date: date
-    versus_text: str
+    opp_team: str
     score: str
     home: bool
 
@@ -36,14 +36,11 @@ class ProballersData:
         reb = clean_stat(self.reb)
         ast = clean_stat(self.ast)
         min = clean_stat(self.min)
-        fgMade = clean_stat(self.fgMade)
-        fgAtt = clean_stat(self.fgAtt)
-        twosMade = clean_stat(self.twosMade)
-        twosAtt = clean_stat(self.twosAtt)
-        threesMade = clean_stat(self.threesMade)
-        threesAtt = clean_stat(self.threesAtt)
-        ftMade = clean_stat(self.ftMade)
-        ftAtt = clean_stat(self.ftAtt)
+        twos = clean_stat(self.twos)
+        threes = clean_stat(self.threes)
+        fg_pct = clean_stat(self.fg_pct)
+        fts = clean_stat(self.fts)
+        ft_pct = clean_stat(self.ft_pct)
         plus_minus = clean_stat(self.plus_minus)
         oreb = clean_stat(self.oreb)
         dreb = clean_stat(self.dreb)
@@ -51,35 +48,21 @@ class ProballersData:
         stl = clean_stat(self.stl)
         to = clean_stat(self.to)
         blk = clean_stat(self.blk)
-        blka = clean_stat(self.blka)
+        eff = clean_stat(self.eff)
 
-        date = datetime.strptime(self.date, "%d/%m/%Y").date()
-        
-        try: 
-            fg_pct = round((int(fgMade) / int(fgAtt)) * 100, 1) if int(fgAtt) > 0 else 0.0
-            fg_pct = f"{fg_pct}%"
-        except ValueError:
-            fg_pct = "-"
-
-        try:
-            ft_pct = round((int(ftMade) / int(ftAtt)) * 100, 1) if int(ftAtt) > 0 else 0.0
-            ft_pct = f"{ft_pct}%"
-        except ValueError:
-            ft_pct = "-"
+        date = datetime.strptime(self.date, "%b %d, %Y").date()
 
         scores = [int(x) for x in self.score.split("-")]
         if self.home:
             score = f"{scores[0]}-{scores[1]}"
             win_loss = "W" if scores[0] > scores[1] else "L"
 
-            opp_team = self.versus_text.split("v")
-            versus_text = f"v {opp_team[1].strip()}" if len(self.versus_text.split("v")) > 1 else self.versus_text.strip()
+            versus_text = f"v {self.opp_team}"
         else:
             score = f"{scores[1]}-{scores[0]}"
             win_loss = "W" if scores[1] > scores[0] else "L"
 
-            opp_team = self.versus_text.split("v")
-            versus_text = f"@ {opp_team[0].strip()}" if len(self.versus_text.split("v")) > 1 else self.versus_text.strip()
+            versus_text = f"@ {self.opp_team}"
 
         return Game(
             date = date,
@@ -90,10 +73,10 @@ class ProballersData:
             reb = reb,
             ast = ast,
             mins = min,
-            twos = f"{twosMade}-{twosAtt}",
-            threes = f"{threesMade}-{threesAtt}",
+            twos = twos,
+            threes = threes,
             fg_pct = fg_pct,
-            fts = f"{ftMade}-{ftAtt}",
+            fts = fts,
             ft_pct = ft_pct,
             oreb = oreb,
             dreb = dreb,
@@ -102,6 +85,6 @@ class ProballersData:
             blk = blk,
             pfs = pfs,
             plus_minus = plus_minus,
-            eff = "-",
-            gameSource = "flashscore"
+            eff = eff,
+            gameSource = "proballers"
         )
