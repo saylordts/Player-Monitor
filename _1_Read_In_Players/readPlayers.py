@@ -15,7 +15,7 @@ def readPlayers():
             Player(
                 name=name,
                 last_game=date.fromisoformat(lastPlayed),
-                links={"proballers": proballersLink, "flashscore": flashscoreLink}
+                profileLinks={"proballers": proballersLink, "flashscore": flashscoreLink}
             )
         )
 

@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 from _DClasses.game import Game
-from _DClasses.player import Player
+from _DClasses.player import Player, Date_Link
 from _DClasses.proballersData import ProballersData
 from _DClasses.report import Report
 
@@ -20,19 +20,15 @@ headers = {
 }
 
 def findDates(report: Report):
-    players_data = []
-    player_teams = []
-    errors = []
-    for player in report.players:
+    for playerIndex, player in enumerate(report.players):
         try:
-            player_data, player_team = findDateOnePlayer(player.links["proballers"])
-            player_data["name"] = player.name
-            players_data.append(player_data)
-            player_teams.append(player_team)
+            dates_links, player_team = findDateOnePlayer(player.profileLinks["proballers"])
+            report.players[playerIndex].found_games.proballers = dates_links
+            report.players[playerIndex].team = player_team
         except requests.RequestException as e:
-            report.errors += f"Failed to scrape {player.links["proballers"]}: {e}"
-
-    return players_data, player_teams
+            errorText += f"Failed to scrape {player.profileLinks["proballers"]}: {e}"
+            report.errors.append(errorText)
+    return report
 
 def findDateOnePlayer(link: str):
     try:
@@ -56,15 +52,14 @@ def findDateOnePlayer(link: str):
         game_date = datetime.strptime(table_drawers[0].a.text.strip(), "%b %d, %Y").date()           
         game_link = f"https://www.proballers.com{table_drawers[0].a['href']}"
 
-        dates_links.append({"date": game_date, "link": game_link})
-
-    player_data = {
-        "dates_links": dates_links
-    }
+        dates_links.append(Date_Link(
+            date = game_date, 
+            link = game_link
+        ))
 
     player_team = soup.find("div", class_="banner__biography__content").p.a.text
 
-    return player_data, player_team
+    return dates_links, player_team
 
 def scrapeOneGame(link: str, player: Player):
     try:
@@ -72,7 +67,7 @@ def scrapeOneGame(link: str, player: Player):
         page.raise_for_status()
     except requests.RequestException as e:
         print(f"Failed to scrape {link}: {e}")
-        return None
+        raise
     soup = BeautifulSoup(page.content, "html.parser")
     team_info = soup.find(
         "div", class_="home-game__content__entry home-game__content__team-stats"

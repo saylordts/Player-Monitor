@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from _DClasses.flashscoreData import FlashscoreData
 from _DClasses.game import Game
-from _DClasses.player import Player
+from _DClasses.player import Player, Date_Link
 from _DClasses.report import Report
 import json
 
@@ -35,17 +35,15 @@ headers = {
 }
 
 def findDates(report: Report):
-    players_data = []
-    errors = []
-    for player in report.players:
+    for playerIndex, player in enumerate(report.players):
         try:
-            player_data = findDatesOnePlayer(player.links["flashscore"])
-            player_data["name"] = player.name
-            players_data.append(player_data)
-        except ValueError:
-            errors.append(player)
-
-    return players_data, errors
+            dates_links = findDatesOnePlayer(player.profileLinks["flashscore"])
+            report.players[playerIndex].found_games.flashscore = dates_links
+        except requests.RequestException as e:
+            errorText = f"Failed to scrape {player.profileLinks["flashscore"]}: {e}"
+            print(errorText)
+            report.errors.append(errorText)
+    return report
 
 def findDatesOnePlayer(link: str):
     try:
@@ -53,7 +51,7 @@ def findDatesOnePlayer(link: str):
         page.raise_for_status()
     except requests.RequestException as e:
         print(f"Failed to scrape {link}: {e}")
-        raise ValueError()
+        raise
     soup = BeautifulSoup(page.content, "html.parser")
     for script in soup.find_all("script"):
         if "playerProfilePageEnvironment" in script.text:
@@ -67,31 +65,30 @@ def findDatesOnePlayer(link: str):
 
     dates_links = []
     for match in last_matches:
-        dates_links.append({
-            "date": datetime.strptime(match["eventStartTime"], "%d.%m.%y").date(),
-            "link": f"https://www.flashscore.com/match/basketball/{match['homeParticipantUrl']}-{match['homeParticipantEncodedId']}/{match['awayParticipantUrl']}-{match['awayParticipantEncodedId']}/summary/player-stats/overall/?mid={match['eventEncodedId']}"
-        })
-    player_data = {
-        "dates_links": dates_links
-        }
+        dates_links.append(Date_Link(
+            date = datetime.strptime(match["eventStartTime"], "%d.%m.%y").date(),
+            link = f"https://www.flashscore.com/match/basketball/{match['homeParticipantUrl']}-{match['homeParticipantEncodedId']}/{match['awayParticipantUrl']}-{match['awayParticipantEncodedId']}/summary/player-stats/overall/?mid={match['eventEncodedId']}"
+        ))
 
-    return player_data
+    return dates_links
 
 def scrapeOneGame(link: str, player: Player):
     try:
         basicPage = requests.get(link, headers=gameHeaders, timeout=20)
         basicPage.raise_for_status()
     except requests.RequestException as e:
-        print(f"Failed to scrape {link}: {e}")
-        return None
+        errorMessage = f"Failed to scrape {link}: {e}"
+        print(errorMessage)
+        raise PlayerScrapeError(errorMessage) from e
     try:
         matchID = link.split("mid=")[1]
         data_link = f"https://2.flashscore.ninja/2/x/feed/df_psn_1_{matchID}"
         playerPage = requests.get(data_link, headers=gameHeaders, timeout=20)
         playerPage.raise_for_status()
     except requests.RequestException as e:
-        print(f"Failed to scrape {link}: {e}")
-        return None
+        errorMessage = f"Failed to scrape {data_link}: {e}"
+        print(errorMessage)
+        raise PlayerScrapeError(errorMessage) from e
     playerID = player.links["flashscore"].split("/")[-2]
     allPlayers = playerPage.text.split("PA÷")
     homePlayers = allPlayers[2].split("PJ÷")[1:]
@@ -144,3 +141,6 @@ def scrapeOneGame(link: str, player: Player):
     ).toGame()
 
     return game
+
+class PlayerScrapeError(Exception):
+    pass
