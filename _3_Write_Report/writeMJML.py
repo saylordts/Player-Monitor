@@ -15,7 +15,7 @@ def writeMJML(report: Report):
       elif gameIndex == len(player.games) - 1:
         mjml += gameFooter()
     if len(player.games) == 0:
-      mjml += noGames()
+      mjml += noGames(player.last_game)
     if playerIndex < len(report.players) - 1:
       mjml += playerSpacer()
   mjml += footer()
@@ -92,12 +92,12 @@ def footer():
    return """  </mj-body>
 </mjml>"""
 
-def noGames():
-  return """      <mj-section mj-class="game-top" padding-top="5px" padding-bottom="5px">
+def noGames(last_game_date: str):
+  return f"""      <mj-section mj-class="game-top" padding-top="5px" padding-bottom="5px">
           <mj-column vertical-align="middle" width="75%">
 
             <mj-text font-size="16px" font-weight="bold" align="center">
-              No Games Since Jul 5, 2026
+              No Games Since {last_game_date.strftime("%b %d, %Y")}
             </mj-text>
 
           </mj-column>
