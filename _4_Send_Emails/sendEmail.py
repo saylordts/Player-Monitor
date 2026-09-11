@@ -30,3 +30,18 @@ Please view this email in an HTML-supported email client.
     msg.add_alternative(html, subtype="html")
 
     send_msg(msg, sender_email, False)
+
+def sendFailureEmail(text: str):
+    sender_email = SENDER_EMAIL
+    receiver_email = RECEIVER_EMAIL
+
+    msg = EmailMessage()
+    msg["to"] = receiver_email
+    msg["from"] = sender_email
+    msg["subject"] = "Players Update Failure(s)"
+
+    text = text
+
+    msg.set_content(text)
+
+    send_msg(msg, sender_email, False)

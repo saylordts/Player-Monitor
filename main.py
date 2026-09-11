@@ -1,7 +1,7 @@
 from _1_Read_In_Players.readPlayers import readPlayers
 from _2_Run_Scrapers.scraperCommander import scraperCommander
 from _3_Write_Report.writeReport import writeReport
-from _4_Send_Emails.sendEmail import sendEmail
+from _4_Send_Emails.sendEmail import sendEmail, sendFailureEmail
 from _5_Save_Results.savePlayers import savePlayers
 import argparse
 
@@ -15,6 +15,9 @@ def main(debug=True):
     if not debug:
       savePlayers(report)
       sendEmail(report)
+      if report.errors:
+         sendFailureEmail(report.errors)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
