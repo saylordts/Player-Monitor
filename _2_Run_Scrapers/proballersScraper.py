@@ -26,7 +26,7 @@ def findDates(report: Report):
             report.players[playerIndex].found_games.proballers = dates_links
             report.players[playerIndex].team = player_team
         except requests.RequestException as e:
-            errorText += f"Failed to scrape {player.profileLinks["proballers"]}: {e}"
+            errorText += f"Failed to scrape {player.profileLinks['proballers']}: {e}"
             report.errors.append(errorText)
     return report
 

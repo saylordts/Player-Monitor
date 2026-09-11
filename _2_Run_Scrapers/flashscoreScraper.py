@@ -40,7 +40,7 @@ def findDates(report: Report):
             dates_links = findDatesOnePlayer(player.profileLinks["flashscore"])
             report.players[playerIndex].found_games.flashscore = dates_links
         except requests.RequestException as e:
-            errorText = f"Failed to scrape {player.profileLinks["flashscore"]}: {e}"
+            errorText = f"Failed to scrape {player.profileLinks['flashscore']}: {e}"
             print(errorText)
             report.errors.append(errorText)
     return report
