@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from _2_Run_Scrapers.PlayerScrapeError import PlayerScrapeError
 from _DClasses.flashscoreData import FlashscoreData
 from _DClasses.game import Game
 from _DClasses.player import Player, Date_Link
@@ -41,7 +42,6 @@ def findDates(report: Report):
             report.players[playerIndex].found_games.flashscore = dates_links
         except requests.RequestException as e:
             errorText = f"Failed to scrape {player.profileLinks['flashscore']}: {e}"
-            print(errorText)
             report.errors.append(errorText)
     return report
 
@@ -50,7 +50,6 @@ def findDatesOnePlayer(link: str):
         page = requests.get(link, headers=dateHeaders, timeout=20)
         page.raise_for_status()
     except requests.RequestException as e:
-        print(f"Failed to scrape {link}: {e}")
         raise
     soup = BeautifulSoup(page.content, "html.parser")
     for script in soup.find_all("script"):
@@ -78,7 +77,6 @@ def scrapeOneGame(link: str, player: Player):
         basicPage.raise_for_status()
     except requests.RequestException as e:
         errorMessage = f"Failed to scrape {link}: {e}"
-        print(errorMessage)
         raise PlayerScrapeError(errorMessage) from e
     try:
         matchID = link.split("mid=")[1]
@@ -87,9 +85,8 @@ def scrapeOneGame(link: str, player: Player):
         playerPage.raise_for_status()
     except requests.RequestException as e:
         errorMessage = f"Failed to scrape {data_link}: {e}"
-        print(errorMessage)
         raise PlayerScrapeError(errorMessage) from e
-    playerID = player.links["flashscore"].split("/")[-2]
+    playerID = player.profileLinks["flashscore"].split("/")[-2]
     allPlayers = playerPage.text.split("PA÷")
     homePlayers = allPlayers[2].split("PJ÷")[1:]
     awayPlayers = allPlayers[3].split("PJ÷")[1:]
@@ -98,8 +95,11 @@ def scrapeOneGame(link: str, player: Player):
     if playerdata is None:
         home = False
         playerdata = next((p for p in awayPlayers if playerID in p), None)
+        if playerdata is None:
+            return None
     else: 
         home = True
+    
     stats = playerdata.split("PC÷")[1].split("¬~")[0].split("|")
 
     soup = BeautifulSoup(basicPage.content, "html.parser")
@@ -141,6 +141,3 @@ def scrapeOneGame(link: str, player: Player):
     ).toGame()
 
     return game
-
-class PlayerScrapeError(Exception):
-    pass

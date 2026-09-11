@@ -24,4 +24,5 @@ class Game:
     pfs: str
     plus_minus: str
     eff: str
+    player_team: str
     gameSource: str = "N/A"

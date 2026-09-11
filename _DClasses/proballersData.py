@@ -23,7 +23,8 @@ class ProballersData:
     blk: str
     eff: str
     date: date
-    opp_team: str
+    home_team: str
+    away_team: str
     score: str
     home: bool
 
@@ -57,12 +58,14 @@ class ProballersData:
             score = f"{scores[0]}-{scores[1]}"
             win_loss = "W" if scores[0] > scores[1] else "L"
 
-            versus_text = f"v {self.opp_team}"
+            versus_text = f"v {self.away_team}"
+            player_team = self.home_team
         else:
             score = f"{scores[1]}-{scores[0]}"
             win_loss = "W" if scores[1] > scores[0] else "L"
 
-            versus_text = f"@ {self.opp_team}"
+            versus_text = f"@ {self.home_team}"
+            player_team = self.away_team
 
         return Game(
             date = date,
@@ -86,5 +89,6 @@ class ProballersData:
             pfs = pfs,
             plus_minus = plus_minus,
             eff = eff,
-            gameSource = "proballers"
+            gameSource = "proballers",
+            player_team = player_team
         )

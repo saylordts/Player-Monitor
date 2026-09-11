@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from _2_Run_Scrapers.PlayerScrapeError import PlayerScrapeError
 from _DClasses.game import Game
 from _DClasses.player import Player, Date_Link
 from _DClasses.proballersData import ProballersData
@@ -22,9 +23,8 @@ headers = {
 def findDates(report: Report):
     for playerIndex, player in enumerate(report.players):
         try:
-            dates_links, player_team = findDateOnePlayer(player.profileLinks["proballers"])
+            dates_links = findDateOnePlayer(player.profileLinks["proballers"])
             report.players[playerIndex].found_games.proballers = dates_links
-            report.players[playerIndex].team = player_team
         except requests.RequestException as e:
             errorText += f"Failed to scrape {player.profileLinks['proballers']}: {e}"
             report.errors.append(errorText)
@@ -35,7 +35,6 @@ def findDateOnePlayer(link: str):
         page = requests.get(link, headers=headers, timeout=20)
         page.raise_for_status()
     except requests.RequestException as e:
-        print(f"Failed to scrape {link}: {e}")
         raise
     soup = BeautifulSoup(page.content, "html.parser")
     last_five = soup.find(id="anchor-last5games")
@@ -57,23 +56,22 @@ def findDateOnePlayer(link: str):
             link = game_link
         ))
 
-    player_team = soup.find("div", class_="banner__biography__content").p.a.text
-
-    return dates_links, player_team
+    return dates_links
 
 def scrapeOneGame(link: str, player: Player):
     try:
         page = requests.get(link, headers=headers, timeout=20)
         page.raise_for_status()
     except requests.RequestException as e:
-        print(f"Failed to scrape {link}: {e}")
-        raise
+        errorMessage = f"Failed to scrape {link}: {e}"
+        raise PlayerScrapeError(errorMessage)
     soup = BeautifulSoup(page.content, "html.parser")
     team_info = soup.find(
         "div", class_="home-game__content__entry home-game__content__team-stats"
        )
     teams = team_info.div.find_all("div", class_="row")
     home = True
+    table_drawers = []
     for teamIndex, team in enumerate(teams):
         rows = team.table.tbody.find_all("tr")
         for row in rows:
@@ -82,9 +80,9 @@ def scrapeOneGame(link: str, player: Player):
                 table_drawers = row.find_all("td")
                 home = True if teamIndex == 0 else False
 
-    if table_drawers == []:
-        print(f"Player {player.name} not found in game {link}")
-        return None
+    if not table_drawers:
+        errorMessage = f"Player {player.name} not found in game {link}"
+        raise PlayerScrapeError(errorMessage)
 
     game_info = soup.find(
         "div", class_="home-game__content__result__final-score__score"
@@ -95,14 +93,15 @@ def scrapeOneGame(link: str, player: Player):
     team_info = soup.find(
         "div", class_="home-game__content__result__final-score__content"
     )
-    team_arg = "home-game__content__result__final-score__team home-game__content__result__final-score__team--right" if home else "home-game__content__result__final-score__team"
-    opp_team = team_info.find("div", class_=team_arg).h2.a.text.strip()
+    home_team = team_info.find("div", class_="home-game__content__result__final-score__team home-game__content__result__final-score__team--right").h2.a.text.strip()
+    away_team = team_info.find("div", class_="home-game__content__result__final-score__team").h2.a.text.strip()
 
     table_drawers = [table_drawer.text.strip() for table_drawer in table_drawers]
 
     game = ProballersData(
         date = date,
-        opp_team = opp_team,
+        home_team = home_team,
+        away_team = away_team,
         score = score,
         home = home,
         pts = table_drawers[1],

@@ -76,12 +76,14 @@ class FlashscoreData:
             win_loss = "W" if scores[0] > scores[1] else "L"
 
             opp_team = self.versus_text.split("v")
+            player_team = opp_team[0]
             versus_text = f"v {opp_team[1].strip()}" if len(self.versus_text.split("v")) > 1 else self.versus_text.strip()
         else:
             score = f"{scores[1]}-{scores[0]}"
             win_loss = "W" if scores[1] > scores[0] else "L"
 
             opp_team = self.versus_text.split("v")
+            player_team = opp_team[1]
             versus_text = f"@ {opp_team[0].strip()}" if len(self.versus_text.split("v")) > 1 else self.versus_text.strip()
 
         return Game(
@@ -106,5 +108,6 @@ class FlashscoreData:
             pfs = pfs,
             plus_minus = plus_minus,
             eff = "-",
-            gameSource = "flashscore"
+            gameSource = "flashscore",
+            player_team= player_team
         )

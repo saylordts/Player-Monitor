@@ -5,7 +5,7 @@ from _DClasses.player import Player
 class Report:
     players: list[Player] = field(default_factory=list)
     html: str = ""
-    errors: str = ""
+    errors: list[str] = field(default_factory=list)
     def getPlayerByName(self, name: str) -> Player:
         for player in self.players:
             if player.name == name:

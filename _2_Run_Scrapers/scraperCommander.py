@@ -1,3 +1,4 @@
+from _2_Run_Scrapers.PlayerScrapeError import PlayerScrapeError
 from _DClasses.report import Report
 import _2_Run_Scrapers.flashscoreScraper as fs
 import _2_Run_Scrapers.proballersScraper as pb
@@ -24,15 +25,14 @@ def runScrapers(report: Report):
                     if game:
                         report.players[playerIndex].games.append(game)
                 except PlayerScrapeError as e:
-                    report.errors.append(e)
+                    report.errors.append(str(e))
             elif "proballers" in use_game.link:
                 try:
                     game = pb.scrapeOneGame(use_game.link,report.players[playerIndex])
                     if game:
                         report.players[playerIndex].games.append(game)
                 except PlayerScrapeError as e:
-                    report.errors.append(e)
+                    report.errors.append(str(e))
+        if player.games:
+            report.players[playerIndex].team = player.games[-1].player_team
     return report
-
-class PlayerScrapeError(Exception):
-    pass
