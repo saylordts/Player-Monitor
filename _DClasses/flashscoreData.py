@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import datetime
 
 from _DClasses.game import Game
 
@@ -58,7 +58,7 @@ class FlashscoreData:
 
         date = datetime.strptime(self.date, "%d/%m/%Y").date()
         
-        try: 
+        try:
             fg_pct = round((int(fgMade) / int(fgAtt)) * 100, 1) if int(fgAtt) > 0 else 0.0
             fg_pct = f"{fg_pct}%"
         except ValueError:
@@ -69,6 +69,18 @@ class FlashscoreData:
             ft_pct = f"{ft_pct}%"
         except ValueError:
             ft_pct = "-"
+
+        try:
+            twos_pct = round((int(twosMade) / int(twosAtt)) * 100, 1) if int(twosAtt) > 0 else 0.0
+            twos_pct = f"{twos_pct}%"
+        except ValueError:
+            twos_pct = "-"
+
+        try:
+            threes_pct = round((int(threesMade) / int(threesAtt)) * 100, 1) if int(threesAtt) > 0 else 0.0
+            threes_pct = f"{threes_pct}%"
+        except ValueError:
+            threes_pct = "-"
 
         scores = [int(x) for x in self.score.split("-")]
         if self.home:
@@ -93,21 +105,23 @@ class FlashscoreData:
             score = score,
             pts = pts,
             reb = reb,
+            oreb = oreb,
+            dreb = dreb,
             ast = ast,
             mins = min,
-            twos = f"{twosMade}-{twosAtt}",
-            threes = f"{threesMade}-{threesAtt}",
+            fgs = f"{fgMade}-{fgAtt}",
             fg_pct = fg_pct,
             fts = f"{ftMade}-{ftAtt}",
             ft_pct = ft_pct,
-            oreb = oreb,
-            dreb = dreb,
+            twos = f"{twosMade}-{twosAtt}",
+            twos_pct = twos_pct,
+            threes = f"{threesMade}-{threesAtt}",
+            threes_pct = threes_pct,
             stl = stl,
-            to = to,
             blk = blk,
+            to = to,
             pfs = pfs,
             plus_minus = plus_minus,
             eff = "-",
-            gameSource = "flashscore",
             player_team= player_team
         )

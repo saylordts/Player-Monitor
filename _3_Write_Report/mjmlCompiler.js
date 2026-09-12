@@ -8,7 +8,11 @@ process.stdin.on("data", chunk => {
 
 process.stdin.on("end", async () => {
     try {
-        const result = await mjml2html(input);
+        const result = await mjml2html(input, {
+            minify: true,
+            keepComments: false
+        });
+
         console.log(result.html);
     } catch (error) {
         console.error(error);

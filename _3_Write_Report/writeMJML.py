@@ -3,112 +3,113 @@ from _DClasses.report import Report
 from _DClasses.game import Game
 
 def writeMJML(report: Report):
-  mjml = header()
-  for playerIndex, player in enumerate(report.players):
-    mjml += playerHeader(player.name, player.team)
-    for gameIndex, game in enumerate(player.games):
-      if gameIndex == 0: 
-         mjml += gameHeader()
-      mjml += singleGame(game)
-      if gameIndex < len(player.games) - 1:
-        mjml += gameSpacer()
-      elif gameIndex == len(player.games) - 1:
-        mjml += gameFooter()
-    if len(player.games) == 0:
-      mjml += gameHeader()
-      mjml += noGames(player.last_game)
-      mjml += gameFooter()
-    if playerIndex < len(report.players) - 1:
-      mjml += playerSpacer()
-  mjml += footer()
-            
-  return mjml
+    mjml = header()
+
+    for  player in report.players:
+        mjml += playerHeader(player.name, player.team)
+
+        if player.games:
+            for game in player.games:
+                mjml += singleGame(game)
+        else:
+            mjml += noGames(player.last_game)
+
+    mjml += footer()
+
+    return mjml
+
 
 def header():
-  todayDate = date.today().strftime("%B %d, %Y")
-  return f"""
+    todayDate = date.today().strftime("%B %d, %Y")
+
+    return f"""
 <mjml>
   <mj-head>
     <mj-attributes>
       <mj-all padding="0px" />
-      <mj-class name="game-top" background-color="#ffffff" border-radius="8px 8px 0px 0px" />
-      <mj-class name="game-bottom" background-color="#ffffff" border-radius="0px 0px 8px 8px" />
-      <mj-class name="no-game" background-color="#ffffff" border-radius="8px" />
+      <mj-class name="player-section" padding-left="5%" padding-right="1%" padding-bottom="5px" padding-top="5px"/>
+      <mj-class name="player-column" background-color="#ffffff" border-radius="8px" padding="20px"/>
+      <mj-class name="player-name" font-size="24px" font-weight="bold" color="#333333" padding="0px"/>
+      <mj-class name="player-team" font-size="16px" font-weight="bold" color="#333333" padding="10px 0px 0px 20px"/>
+      <mj-class name="game-section" padding-left="10%" padding-right="1%" padding-top="5px" padding-bottom="5px"/>
+      <mj-class name="game-column" background-color="#ffffff" border-radius="8px" padding="10px 15px"/>
+      <mj-class name="game-stats" color="#555555" font-size="12px" line-height="18px" align="left" padding="0px"/>
+			      
     </mj-attributes>
   </mj-head>
   <mj-body background-color="#f0f0f0">
     <mj-section padding="10px">
       <mj-column>
-        <mj-text align="center">Email Update {todayDate} </mj-text>
+        <mj-text align="center">
+          Email Update {todayDate}
+        </mj-text>
       </mj-column>
-    </mj-section>"""
+    </mj-section>
+"""
+
 
 def playerHeader(player_name: str, player_team: str):
-  return f"""
-    <mj-wrapper padding-left="5%" padding-right="1%" padding-bottom="5px">
-      <mj-section>
-        <mj-column background-color="#ffffff" border-radius="8px">
-          <mj-text font-size="24px" font-weight="bold" color="#333333" padding="20px 20px 0px 20px">{player_name}</mj-text>
-          <mj-text font-size="16px" font-weight="bold" color="#333333" padding="10px 20px 20px 40px">{player_team}</mj-text>
-        </mj-column>
-      </mj-section>
-    </mj-wrapper>"""
+    return f"""
+    <mj-section mj-class="player-section">
+      <mj-column mj-class="player-column">
+        <mj-text mj-class="player-name">
+          {player_name}
+        </mj-text>
+        <mj-text mj-class="player-team">
+          {player_team}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+"""
 
-def gameHeader():
-   return """
-    <mj-wrapper padding-left='10%' padding-right='1%'>"""
 
-def singleGame(game:Game):
-   return f"""
-      <mj-section mj-class="game-top" padding-top="5px" padding-bottom="5px">
-        <mj-group>
-          <mj-column vertical-align="middle" width="75%">
-            <mj-text font-size="16px" font-weight="bold" align="center">
-              {game.date.strftime("%b %d, %Y")} {game.versus_text}
-            </mj-text>
-          </mj-column>
-          <mj-column vertical-align="middle" width="25%">
-            <mj-text font-size="16px" font-weight="bold" align="left">{game.win_loss} {game.score}</mj-text>
-          </mj-column>
-        </mj-group>
-      </mj-section>
-      <mj-section mj-class="game-bottom" padding-bottom="5px">
-        <mj-column padding-left="15px">
-          <mj-text color="#555555" padding-top="5px" font-size="13px" align="left">
-            {game.pts} PTS | {game.reb} REB ({game.oreb} OFF) | {game.ast} AST | {game.mins} MIN
-          </mj-text>
-          <mj-text color="#555555" padding-top="5px" font-size="12px" align="left">
-            2PT {game.twos} | 3PT {game.threes} | FG&#37; {game.fg_pct} | FT {game.fts} ({game.ft_pct})
-          </mj-text>
-          <mj-text color="#555555" padding-top="5px" font-size="12px" align="left">
-            {game.stl} STL | {game.blk} BLK | {game.to} TO | {game.pfs} PF | &#177; {game.plus_minus} | EFF {game.eff}
-          </mj-text>
-        </mj-column>
-      </mj-section>"""
+def singleGame(game: Game):
+    return f"""
+    <mj-section mj-class="game-section">
+      <mj-column mj-class="game-column">
+        <mj-text mj-class="game-stats">
+          <div style="font-size:16px; line-height:22px; font-weight:bold; color:#000000; text-align:center; padding-bottom:5px;">
+            <span style="white-space:nowrap;">{game.date.strftime("%b %d, %Y")} {game.versus_text}</span>
+            <span style="white-space:nowrap; display:inline-block; margin-left:20px;">{game.win_loss} {game.score}</span>
+          </div>
+            {game.pts} PTS | {game.reb} REB ({game.oreb} / {game.dreb}) | {game.ast} AST | {game.mins} MIN<br/>
+            FG {game.fgs} ({game.fg_pct}) | FT {game.fts} ({game.ft_pct}) <br/>
+            2PT {game.twos} ({game.twos_pct}) | 3PT {game.threes} ({game.threes_pct}) <br/>
+          	{game.stl} STL | {game.blk} BLK | {game.to} TO | {game.pfs} PF | &#177; {game.plus_minus} | EFF {game.eff}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+"""
 
-def gameFooter():
-   return """
-    </mj-wrapper>"""
-
-def gameSpacer():
-   return """
-      <mj-section><mj-column><mj-spacer height='5px'></mj-spacer></mj-column></mj-section>"""
-
-def playerSpacer():
-   return """
-    <mj-section><mj-column><mj-spacer height='10px'></mj-spacer></mj-column></mj-section>"""
-
-def footer():
-   return """
-  </mj-body>
-</mjml>"""
 
 def noGames(last_game_date: str):
-  return f"""
-      <mj-section mj-class="no-game" padding-top="5px" padding-bottom="5px">
-        <mj-column vertical-align="middle" width="75%">
-          <mj-text font-size="16px" font-weight="bold" align="center">
-            No Games Since {last_game_date.strftime("%b %d, %Y")}
-          </mj-text>
-        </mj-column>
-    </mj-section>"""
+    return f"""
+    <mj-section
+      padding-left="10%"
+      padding-right="1%"
+      padding-top="5px"
+      padding-bottom="5px"
+    >
+      <mj-column
+        background-color="#ffffff"
+        border-radius="8px"
+        padding="10px"
+      >
+        <mj-text
+          font-size="16px"
+          font-weight="bold"
+          align="center"
+          padding="0px"
+        >
+          No Games Since {last_game_date.strftime("%b %d, %Y")}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+"""
+
+
+def footer():
+    return """
+  </mj-body>
+</mjml>
+"""

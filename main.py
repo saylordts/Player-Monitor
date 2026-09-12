@@ -17,8 +17,10 @@ def main(debug=True):
       sendEmail(report)
       if report.errors:
         sendFailureEmail("\n".join(report.errors))
-    elif report.errors:
-        print("\n".join(report.errors))
+    else:
+        if report.errors:
+            print("\n".join(report.errors))
+        return report
 
 
 if __name__ == "__main__":

@@ -98,7 +98,7 @@ def scrapeOneGame(link: str, player: Player):
     )
     away_team = team_info.find("div", class_="home-game__content__result__final-score__team home-game__content__result__final-score__team--right").h2.a.text.strip()
     home_team = team_info.find("div", class_="home-game__content__result__final-score__team").h2.a.text.strip()
-    print(f"Scraping Game {away_team} @ {home_team} for {player.name}")
+    
     table_drawers = [table_drawer.text.strip() for table_drawer in table_drawers]
 
     game = ProballersData(

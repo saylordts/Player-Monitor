@@ -9,20 +9,22 @@ class Game:
     score: str 
     pts: str
     reb: str
+    oreb: str
+    dreb: str
     ast: str
     mins: str
-    twos: str
-    threes: str
+    fgs: str
     fg_pct: str
     fts: str
     ft_pct: str
-    oreb: str
-    dreb: str
+    twos: str
+    twos_pct: str
+    threes: str
+    threes_pct: str
     stl: str
-    to: str
     blk: str
+    to: str
     pfs: str
     plus_minus: str
     eff: str
     player_team: str
-    gameSource: str = "N/A"
