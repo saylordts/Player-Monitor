@@ -2,6 +2,15 @@ from datetime import date
 from _DClasses.report import Report
 from _DClasses.player import Player
 import pandas as pd
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
+
+playerLinksFile = Path(
+    os.getenv("PLAYER_LINKS_FILE", "_Data/playerLinks.csv")
+)
 
 def readPlayers():
     
