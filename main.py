@@ -16,9 +16,9 @@ def main(debug=True):
       savePlayers(report)
       sendEmail(report)
       if report.errors:
-         sendFailureEmail("\n".join(report.errors))
-    else:
-       print("\n".join(report.errors))
+        sendFailureEmail("\n".join(report.errors))
+    elif report.errors:
+        print("\n".join(report.errors))
 
 
 if __name__ == "__main__":

@@ -37,3 +37,5 @@ class Player:
         self.use_games = kept_games
 
         return self
+    def getProballersID(self):
+        return self.profileLinks["proballers"].split("/")[-2]

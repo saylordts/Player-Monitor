@@ -65,6 +65,9 @@ def scrapeOneGame(link: str, player: Player):
     except requests.RequestException as e:
         errorMessage = f"Failed to scrape {link}: {e}"
         raise PlayerScrapeError(errorMessage)
+
+    playerID = player.getProballersID()
+    
     soup = BeautifulSoup(page.content, "html.parser")
     team_info = soup.find(
         "div", class_="home-game__content__entry home-game__content__team-stats"
@@ -75,8 +78,8 @@ def scrapeOneGame(link: str, player: Player):
     for teamIndex, team in enumerate(teams):
         rows = team.table.tbody.find_all("tr")
         for row in rows:
-            row_player = row.find("td", class_="left first__left d-flex align-items-center").a.text.strip()
-            if row_player == player.name:
+            found_href = row.find("td", class_="left first__left d-flex align-items-center").a["href"]
+            if playerID in found_href:
                 table_drawers = row.find_all("td")
                 home = True if teamIndex == 0 else False
 
