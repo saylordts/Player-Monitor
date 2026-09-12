@@ -29,10 +29,6 @@ Please view this email in an HTML-supported email client.
     msg.set_content(text)
     msg.add_alternative(html, subtype="html")
 
-
-    print(f"HTML size: {len(html.encode('utf-8')) / 1024:.1f} KB")
-    print(f"Full email size: {len(msg.as_bytes()) / 1024:.1f} KB")
-
     send_msg(msg, sender_email, False)
 
 def sendFailureEmail(text: str):
