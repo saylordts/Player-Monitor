@@ -26,11 +26,11 @@ def findDates(report: Report):
 
     if in_github_actions:
         player_iterator = report.players
-        print("        Proballers - finding dates...")
+        print("        • Proballers - finding dates...")
     else:
         player_iterator = tqdm(
                     report.players, 
-                    desc="Proballers - finding dates", 
+                    desc="• Proballers - finding dates", 
                     unit="player", 
                     bar_format="        {desc}:   {percentage:3.0f}%|{bar:30}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
                     )
@@ -45,7 +45,7 @@ def findDates(report: Report):
 
     if in_github_actions:
         num_dates_found = sum(len(player.found_games.proballers) for player in report.players)
-        print(f"        Proballers - finding dates... DONE ({num_dates_found} games found for {len(report.players)} players)")
+        print(f"        • Proballers - finding dates... DONE ({num_dates_found} games found for {len(report.players)} players)")
 
     return report
 
