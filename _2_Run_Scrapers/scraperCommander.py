@@ -7,17 +7,14 @@ import _2_Run_Scrapers.proballersScraper as pb
 
 
 def scraperCommander(report: Report):
-    print("    1. Finding games...")
     report = fs.findDates(report)
     report = pb.findDates(report)
-    print("    1. Finding games... DONE")
     
     for playerIndex, player in enumerate(report.players):
         report.players[playerIndex] = player.chooseDates()
 
-    print("    2. Scraping games...")
+    print()
     report = runScrapers(report)
-    print("    2. Scraping games... DONE")
 
     return report
 
@@ -70,5 +67,5 @@ def runScrapers(report: Report):
             report.players[playerIndex].team = player.games[-1].player_team
 
     if in_github_actions:
-        print(f"        • Scraping games - all servers... DONE ({successful_count}/{total_games} successful)")
+        print(f"          • Scraping games - all servers... DONE ({successful_count}/{total_games} successful)")
     return report

@@ -60,7 +60,7 @@ def findDates(report: Report):
 
     if in_github_actions:
         num_dates_found = sum(len(player.found_games.flashscore) for player in report.players)
-        print(f"        • Flashscore - finding dates... DONE ({num_dates_found} games found for {len(report.players)} players)")
+        print(f"          • Flashscore - finding dates... DONE ({num_dates_found} games found for {len(report.players)} players)")
     
     return report
 
