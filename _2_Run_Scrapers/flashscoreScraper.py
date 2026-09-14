@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from tqdm import tqdm
 from _2_Run_Scrapers.PlayerScrapeError import PlayerScrapeError
 from _DClasses.flashscoreData import FlashscoreData
 from _DClasses.game import Game
@@ -36,7 +37,14 @@ headers = {
 }
 
 def findDates(report: Report):
-    for playerIndex, player in enumerate(report.players):
+    for playerIndex, player in enumerate(
+        tqdm(
+            report.players, 
+            desc="Flashscore - finding dates", 
+            unit="player", 
+            bar_format="        {desc}:   {percentage:3.0f}%|{bar:30}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
+            )
+        ):
         try:
             dates_links = findDatesOnePlayer(player.profileLinks["flashscore"])
             report.players[playerIndex].found_games.flashscore = dates_links

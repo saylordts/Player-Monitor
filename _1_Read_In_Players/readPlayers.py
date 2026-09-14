@@ -16,7 +16,7 @@ def readPlayers():
     
     report = Report()
 
-    db = pd.read_csv("_Data/playerLinks.csv")
+    db = pd.read_csv(playerLinksFile)
 
     for row in db.itertuples(index=False):
         name, lastPlayed, proballersLink, flashscoreLink = row
