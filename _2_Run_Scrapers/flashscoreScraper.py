@@ -83,10 +83,11 @@ def findDatesOnePlayer(link: str):
 
     dates_links = []
     for match in last_matches:
-        dates_links.append(Date_Link(
-            date = datetime.strptime(match["eventStartTime"], "%d.%m.%y").date(),
-            link = f"https://www.flashscore.com/match/basketball/{match['homeParticipantUrl']}-{match['homeParticipantEncodedId']}/{match['awayParticipantUrl']}-{match['awayParticipantEncodedId']}/summary/player-stats/overall/?mid={match['eventEncodedId']}"
-        ))
+        if match["absenceCategory"] != "not in the squad":
+            dates_links.append(Date_Link(
+                date = datetime.strptime(match["eventStartTime"], "%d.%m.%y").date(),
+                link = f"https://www.flashscore.com/match/basketball/{match['homeParticipantUrl']}-{match['homeParticipantEncodedId']}/{match['awayParticipantUrl']}-{match['awayParticipantEncodedId']}/summary/player-stats/overall/?mid={match['eventEncodedId']}"
+            ))
 
     return dates_links
 
@@ -115,7 +116,8 @@ def scrapeOneGame(link: str, player: Player):
         home = False
         playerdata = next((p for p in awayPlayers if playerID in p), None)
         if playerdata is None:
-            return None
+            errorMessage = f"Player {player.name} not found in game {link}"
+            raise PlayerScrapeError(errorMessage)
     else: 
         home = True
     
