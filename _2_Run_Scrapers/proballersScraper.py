@@ -1,9 +1,9 @@
 import requests
+import os
 from bs4 import BeautifulSoup
 from datetime import datetime
 from tqdm import tqdm
 from _2_Run_Scrapers.PlayerScrapeError import PlayerScrapeError
-from _DClasses.game import Game
 from _DClasses.player import Player, Date_Link
 from _DClasses.proballersData import ProballersData
 from _DClasses.report import Report
@@ -22,20 +22,31 @@ headers = {
 }
 
 def findDates(report: Report):
-    for playerIndex, player in enumerate(
-        tqdm(
-            report.players, 
-            desc="Proballers - finding dates", 
-            unit="player", 
-            bar_format="        {desc}:   {percentage:3.0f}%|{bar:30}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
-            )
-        ):
+    in_github_actions = os.getenv("GITHUB_ACTIONS") == "true"
+
+    if in_github_actions:
+        player_iterator = report.players
+        print("        Proballers - finding dates...")
+    else:
+        player_iterator = tqdm(
+                    report.players, 
+                    desc="Proballers - finding dates", 
+                    unit="player", 
+                    bar_format="        {desc}:   {percentage:3.0f}%|{bar:30}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
+                    )
+
+    for playerIndex, player in enumerate(player_iterator):
         try:
             dates_links = findDateOnePlayer(player.profileLinks["proballers"])
             report.players[playerIndex].found_games.proballers = dates_links
         except requests.RequestException as e:
             errorText += f"Failed to scrape {player.profileLinks['proballers']}: {e}"
             report.errors.append(errorText)
+
+    if in_github_actions:
+        num_dates_found = sum(len(player.found_games.proballers) for player in report.players)
+        print(f"        Proballers - finding dates... DONE ({num_dates_found} games found for {len(report.players)} players)")
+
     return report
 
 def findDateOnePlayer(link: str):
