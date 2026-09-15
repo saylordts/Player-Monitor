@@ -5,14 +5,17 @@ from _DClasses.game import Game
 def writeMJML(report: Report):
     mjml = header()
 
-    for  player in report.players:
-        mjml += playerHeader(player.name, player.team)
-
+    noGameIndexes = []
+    for playerIndex, player in enumerate(report.players):
         if player.games:
+            mjml += playerHeader(player.name, player.team)
             for game in player.games:
                 mjml += singleGame(game)
         else:
-            mjml += noGames(player.last_game)
+            noGameIndexes.append(playerIndex)
+
+    if noGameIndexes:
+        mjml += noGamesPlayers(report, noGameIndexes)
 
     mjml += footer()
 
@@ -33,8 +36,11 @@ def header():
       <mj-class name="player-team" font-size="16px" font-weight="bold" color="#333333" padding="10px 0px 0px 20px"/>
       <mj-class name="game-section" padding-left="10%" padding-right="1%" padding-top="5px" padding-bottom="5px"/>
       <mj-class name="game-column" background-color="#ffffff" border-radius="8px" padding="10px 15px"/>
+      <mj-class name="game-text-title" font-size="16px" font-weight="bold" align="center" padding="0px 0px 5px 0px"/>
       <mj-class name="game-stats" color="#555555" font-size="12px" line-height="18px" align="left" padding="0px"/>
-			      
+      <mj-class name="nogame-section" padding-left="5%" padding-right="1%" padding-bottom="5px" padding-top="5px"/>
+      <mj-class name="nogame-column" background-color="#ffffff" border-radius="8px" padding="10px 15px"/>
+      <mj-class name="nogame-text" font-size="16px" font-weight="bold" color="#333333" padding="10px 0px 0px 20px" />
     </mj-attributes>
   </mj-head>
   <mj-body background-color="#f0f0f0">
@@ -106,6 +112,32 @@ def noGames(last_game_date: str):
       </mj-column>
     </mj-section>
 """
+
+def noGamesPlayers(report: Report, noGameIndexes: list):
+    playerTexts = []
+
+    for playerIndex in noGameIndexes:
+        player = report.players[playerIndex]
+        playerTexts.append(f"<span style='white-space: nowrap;'>{player.name} ({player.last_game})</span>")
+
+    text = """
+    <mj-section mj-class="nogame-section">
+      <mj-column mj-class="nogame-column">
+        <mj-text mj-class="nogame-text">
+          """
+
+    if len(playerTexts) == 1:
+        text += f"No recent games for {playerTexts[0]}"
+    elif len(playerTexts) == 2:
+        text += f"No recent games for {playerTexts[0]} or {playerTexts[1]}"
+    else:
+        text += f"No recent games for {', '.join(playerTexts[:-1])}, or {playerTexts[-1]}"
+    text += """
+        </mj-text>
+      </mj-column>
+    </mj-section>
+"""
+    return text
 
 
 def footer():
