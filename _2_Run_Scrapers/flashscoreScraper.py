@@ -107,6 +107,8 @@ def scrapeOneGame(link: str, player: Player):
         errorMessage = f"Failed to scrape {data_link}: {e}"
         raise PlayerScrapeError(errorMessage) from e
     playerID = player.playerData.flashscore.id
+    homeID = link.split("/")[5].split("-")[-1]
+    awayID = link.split("/")[6].split("-")[-1]
     allPlayers = playerPage.text.split("PA÷")
     homePlayers = allPlayers[2].split("PJ÷")[1:]
     awayPlayers = allPlayers[3].split("PJ÷")[1:]
@@ -156,7 +158,8 @@ def scrapeOneGame(link: str, player: Player):
         blk = stats[18],
         blka = stats[19],
         date = date,
-        versus_text = versus_text,
+        homeID = homeID,
+        awayId = awayID,
         score = score,
         home = home
     ).toGame()

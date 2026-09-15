@@ -22,11 +22,12 @@ class Dates_Links:
 @dataclass
 class Player:
     playerData: PlayerData
+    lastTeamID: str
     games: list[Game] = field(default_factory=list)
     found_games: Dates_Links = field(default_factory=Dates_Links)
     use_games: list[str] = field(default_factory=list)
     name: str = "N/A"
-    team: str = "N/A"
+    newTeamID: str = None
     last_game: date = date(1900, 1, 1)
     mjml: str = ""
     def chooseDates(self):
@@ -43,5 +44,3 @@ class Player:
         self.use_games = kept_games
 
         return self
-    def getProballersID(self):
-        return self.profileLinks["proballers"].split("/")[-2]

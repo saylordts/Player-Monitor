@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 playerLinksFile = Path(
-    os.getenv("PLAYER_LINKS_FILE", "_Data/playerLinks.csv")
+    os.getenv("PLAYER_LINKS_FILE", "_Data/players.csv")
 ) 
 
 def readPlayers():
@@ -21,7 +21,7 @@ def readPlayers():
     db = pd.read_csv(playerLinksFile)
 
     for row in db.itertuples(index=False):
-        name, lastPlayed, proballersData, flashscoreData = row
+        name, lastPlayed, lastTeamID, proballersData, flashscoreData = row
         [proballersID, proballersName] = proballersData.split("|")
         [flashscoreName, flashscoreID] = flashscoreData.split("|")
         playerData = PlayerData(
@@ -38,7 +38,8 @@ def readPlayers():
             Player(
                 name=name,
                 last_game=date.fromisoformat(lastPlayed),
-                playerData=playerData
+                playerData=playerData,
+                lastTeamID=lastTeamID
             )
         )
 

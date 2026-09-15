@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 playerUpdateFile = Path(
-    os.getenv("PLAYER_UPDATE_FILE", "_Data/playerLinks.csv")
+    os.getenv("PLAYER_UPDATE_FILE", "_Data/players.csv")
 ) 
 
 def savePlayers(report):
