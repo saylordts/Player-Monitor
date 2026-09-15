@@ -5,7 +5,7 @@ from datetime import datetime
 from tqdm import tqdm
 from _2_Run_Scrapers.PlayerScrapeError import PlayerScrapeError
 from _DClasses.player import Player, Date_Link
-from _DClasses.proballersData import ProballersData
+from _DClasses.proballersDataClasses import ProballersGame
 from _DClasses.report import Report
 
 headers = {
@@ -37,7 +37,7 @@ def findDates(report: Report):
 
     for playerIndex, player in enumerate(player_iterator):
         try:
-            dates_links = findDateOnePlayer(player.profileLinks["proballers"])
+            dates_links = findDateOnePlayer(player.playerData.proballers.getProfileLink())
             report.players[playerIndex].found_games.proballers = dates_links
         except requests.RequestException as e:
             errorText += f"Failed to scrape {player.profileLinks['proballers']}: {e}"
@@ -84,8 +84,6 @@ def scrapeOneGame(link: str, player: Player):
     except requests.RequestException as e:
         errorMessage = f"Failed to scrape {link}: {e}"
         raise PlayerScrapeError(errorMessage)
-
-    playerID = player.getProballersID()
     
     soup = BeautifulSoup(page.content, "html.parser")
     team_info = soup.find(
@@ -98,7 +96,7 @@ def scrapeOneGame(link: str, player: Player):
         rows = team.table.tbody.find_all("tr")
         for row in rows:
             found_href = row.find("td", class_="left first__left d-flex align-items-center").a["href"]
-            if playerID in found_href:
+            if player.playerData.proballers.id in found_href:
                 table_drawers = row.find_all("td")
                 home = True if teamIndex == 0 else False
 
@@ -120,7 +118,7 @@ def scrapeOneGame(link: str, player: Player):
     
     table_drawers = [table_drawer.text.strip() for table_drawer in table_drawers]
 
-    game = ProballersData(
+    game = ProballersGame(
         date = date,
         home_team = home_team,
         away_team = away_team,

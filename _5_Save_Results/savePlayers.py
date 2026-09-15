@@ -1,7 +1,16 @@
 import pandas as pd
+from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+playerUpdateFile = Path(
+    os.getenv("PLAYER_UPDATE_FILE", "_Data/playerLinks.csv")
+) 
 
 def savePlayers(report):
-    df = pd.read_csv("_Data/playerLinks.csv")
+    df = pd.read_csv(playerUpdateFile)
     columns = df.columns.tolist()
     for player in report.players:
         if player.games:
@@ -12,4 +21,4 @@ def savePlayers(report):
             else:
                 new_row = pd.DataFrame([[player.name, last_game.isoformat()]], columns=columns)
                 df = pd.concat([df, new_row], ignore_index=True)
-    df.to_csv("_Data/playerLinks.csv", index=False)
+    df.to_csv(playerUpdateFile, index=False) 

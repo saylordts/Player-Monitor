@@ -5,6 +5,14 @@ from _DClasses.game import Game
 
 @dataclass
 class FlashscoreData:
+    id: str
+    name: str
+    def getProfileLink(self):
+        return f"https://www.flashscore.com/player/{self.name}/{self.id}/"
+
+
+@dataclass
+class FlashscoreGame:
     pts: str
     reb: str
     ast: str

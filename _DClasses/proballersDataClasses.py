@@ -5,6 +5,13 @@ from _DClasses.game import Game
 
 @dataclass
 class ProballersData:
+    id: str
+    name: str
+    def getProfileLink(self):
+        return f"https://www.proballers.com/basketball/player/{self.id}/{self.name}"
+
+@dataclass
+class ProballersGame:
     pts: str
     reb: str
     ast: str

@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from tqdm import tqdm
 from _2_Run_Scrapers.PlayerScrapeError import PlayerScrapeError
-from _DClasses.flashscoreData import FlashscoreData
+from _DClasses.flashscoreDataClasses import FlashscoreGame
 from _DClasses.player import Player, Date_Link
 from _DClasses.report import Report
 import json
@@ -52,7 +52,7 @@ def findDates(report: Report):
 
     for playerIndex, player in enumerate(player_iterator):
         try:
-            dates_links = findDatesOnePlayer(player.profileLinks["flashscore"])
+            dates_links = findDatesOnePlayer(player.playerData.flashscore.getProfileLink())
             report.players[playerIndex].found_games.flashscore = dates_links
         except requests.RequestException as e:
             errorText = f"Failed to scrape {player.profileLinks['flashscore']}: {e}"
@@ -106,7 +106,7 @@ def scrapeOneGame(link: str, player: Player):
     except requests.RequestException as e:
         errorMessage = f"Failed to scrape {data_link}: {e}"
         raise PlayerScrapeError(errorMessage) from e
-    playerID = player.profileLinks["flashscore"].split("/")[-2]
+    playerID = player.playerData.flashscore.id
     allPlayers = playerPage.text.split("PA÷")
     homePlayers = allPlayers[2].split("PJ÷")[1:]
     awayPlayers = allPlayers[3].split("PJ÷")[1:]
@@ -134,7 +134,7 @@ def scrapeOneGame(link: str, player: Player):
         )
     score = title_score["content"].rsplit(" ", 1)[-1]
 
-    game = FlashscoreData(
+    game = FlashscoreGame(
         pts = stats[0],
         reb = stats[1],
         ast = stats[2],

@@ -1,7 +1,13 @@
 from dataclasses import dataclass, field
 from datetime import date
+from _DClasses.flashscoreDataClasses import FlashscoreData
 from _DClasses.game import Game
+from _DClasses.proballersDataClasses import ProballersData
 
+@dataclass
+class PlayerData:
+    flashscore: FlashscoreData
+    proballers: ProballersData
 
 @dataclass
 class Date_Link:
@@ -15,7 +21,7 @@ class Dates_Links:
 
 @dataclass
 class Player:
-    profileLinks: dict[str, str] = field(default_factory=dict)
+    playerData: PlayerData
     games: list[Game] = field(default_factory=list)
     found_games: Dates_Links = field(default_factory=Dates_Links)
     use_games: list[str] = field(default_factory=list)
