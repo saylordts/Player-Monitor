@@ -8,7 +8,7 @@ class ProballersData:
     id: str
     name: str
     def getProfileLink(self):
-        return f"https://www.proballers.com/basketball/player/{self.id}/{self.name}"
+        return f"https://www.proballers.com/basketball/player/{self.id}/{self.name}/games"
 
 @dataclass
 class ProballersGame:
@@ -30,8 +30,8 @@ class ProballersGame:
     blk: str
     eff: str
     date: date
-    home_team: str
-    away_team: str
+    homeID: str
+    awayID: str
     score: str
     home: bool
 

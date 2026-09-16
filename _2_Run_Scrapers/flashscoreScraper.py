@@ -51,11 +51,12 @@ def findDates(report: Report):
             )
 
     for playerIndex, player in enumerate(player_iterator):
+        link = player.playerData.flashscore.getProfileLink()
         try:
-            dates_links = findDatesOnePlayer(player.playerData.flashscore.getProfileLink())
+            dates_links = findDatesOnePlayer(link)
             report.players[playerIndex].found_games.flashscore = dates_links
         except requests.RequestException as e:
-            errorText = f"Failed to scrape {player.profileLinks['flashscore']}: {e}"
+            errorText = f"Failed to scrape {link}: {e}"
             report.errors.append(errorText)
 
     if in_github_actions:
@@ -129,7 +130,6 @@ def scrapeOneGame(link: str, player: Player):
 
     title = soup.find("title").text
     date = title.split(",")[0][-10:]
-    versus_text = title.split(",")[0][:-11].strip()
 
     title_score = soup.find(
        "meta", property="og:title"
@@ -159,7 +159,7 @@ def scrapeOneGame(link: str, player: Player):
         blka = stats[19],
         date = date,
         homeID = homeID,
-        awayId = awayID,
+        awayID = awayID,
         score = score,
         home = home
     ).toGame()

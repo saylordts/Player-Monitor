@@ -36,11 +36,12 @@ def findDates(report: Report):
                     )
 
     for playerIndex, player in enumerate(player_iterator):
+        link = player.playerData.proballers.getProfileLink()
         try:
-            dates_links = findDateOnePlayer(player.playerData.proballers.getProfileLink())
+            dates_links = findDateOnePlayer(link)
             report.players[playerIndex].found_games.proballers = dates_links
         except requests.RequestException as e:
-            errorText += f"Failed to scrape {player.profileLinks['proballers']}: {e}"
+            errorText = f"Failed to scrape {link}: {e}"
             report.errors.append(errorText)
 
     if in_github_actions:
@@ -78,6 +79,7 @@ def findDateOnePlayer(link: str):
     return dates_links
 
 def scrapeOneGame(link: str, player: Player):
+    print(link)
     try:
         page = requests.get(link, headers=headers, timeout=20)
         page.raise_for_status()
@@ -113,15 +115,15 @@ def scrapeOneGame(link: str, player: Player):
     team_info = soup.find(
         "div", class_="home-game__content__result__final-score__content"
     )
-    away_team = team_info.find("div", class_="home-game__content__result__final-score__team home-game__content__result__final-score__team--right").h2.a.text.strip()
-    home_team = team_info.find("div", class_="home-game__content__result__final-score__team").h2.a.text.strip()
+    awayID = team_info.find("div", class_="home-game__content__result__final-score__team home-game__content__result__final-score__team--right").h2.a.text.strip()
+    homeID = team_info.find("div", class_="home-game__content__result__final-score__team").h2.a.text.strip()
     
     table_drawers = [table_drawer.text.strip() for table_drawer in table_drawers]
 
     game = ProballersGame(
         date = date,
-        home_team = home_team,
-        away_team = away_team,
+        homeID = homeID,
+        awayID = awayID,
         score = score,
         home = home,
         pts = table_drawers[1],

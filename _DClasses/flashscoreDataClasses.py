@@ -134,7 +134,6 @@ class FlashscoreGame:
             to = to,
             pfs = pfs,
             plus_minus = plus_minus,
-            eff = "-",
             player_team=player_team_name,
             player_team_ID=player_team_ID
         )

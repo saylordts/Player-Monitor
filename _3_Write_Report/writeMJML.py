@@ -70,6 +70,7 @@ def playerHeader(player_name: str, player_team: str):
 
 
 def singleGame(game: Game):
+    [GS, GS36, TS] = game.getStats()
     return f"""
     <mj-section mj-class="game-section">
       <mj-column mj-class="game-column">
@@ -81,7 +82,8 @@ def singleGame(game: Game):
             {game.pts} PTS | {game.reb} REB ({game.oreb} / {game.dreb}) | {game.ast} AST | {game.mins} MIN<br/>
             FG {game.fgs} ({game.fg_pct}) | FT {game.fts} ({game.ft_pct}) <br/>
             2PT {game.twos} ({game.twos_pct}) | 3PT {game.threes} ({game.threes_pct}) <br/>
-          	{game.stl} STL | {game.blk} BLK | {game.to} TO | {game.pfs} PF | &#177; {game.plus_minus} | EFF {game.eff}
+          	{game.stl} STL | {game.blk} BLK | {game.to} TO | {game.pfs} PF <br/>
+            &#177; {game.plus_minus} | GS {GS} ({GS36} P36) | TS {TS}
         </mj-text>
       </mj-column>
     </mj-section>
