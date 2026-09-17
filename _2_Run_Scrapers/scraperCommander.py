@@ -23,7 +23,7 @@ def runScrapers(report: Report):
     in_github_actions = os.getenv("GITHUB_ACTIONS") == "true"
 
     total_games = sum(len(player.use_games) for player in report.players)
-    successful_count = 0; error_count = 0
+    proballers_success = 0; proballers_count = 0; flashscore_success = 0; flashscore_count = 0
 
     if in_github_actions:
         print("        • Scraping games - all servers...")
@@ -33,7 +33,7 @@ def runScrapers(report: Report):
         total=total_games,
         desc="• Scraping games - all servers",
         unit="game",
-        bar_format="        {desc}: {percentage:3.0f}%|{bar:30}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
+        bar_format="        {desc}: {percentage:3.0f}%|{bar:30}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}] {postfix}"
     )
 
     for playerIndex, player in enumerate(report.players):
@@ -43,29 +43,28 @@ def runScrapers(report: Report):
                     game = fs.scrapeOneGame(use_game.link, report.players[playerIndex])
                     if game:
                         report.players[playerIndex].games.append(game)
-                        successful_count += 1
+                        flashscore_success += 1
                 except PlayerScrapeError as e:
                     report.errors.append(str(e))
-                    error_count += 1
+                flashscore_count += 1
             elif "proballers" in use_game.link:
                 try:
                     game = pb.scrapeOneGame(use_game.link,report.players[playerIndex])
                     if game:
                         report.players[playerIndex].games.append(game)
-                        successful_count += 1
+                        proballers_success += 1
                 except PlayerScrapeError as e:
                     report.errors.append(str(e))
-                    error_count += 1
+                proballers_count += 1
             if progress:
                 progress.update(1)
                 progress.set_postfix(
-                    successful=successful_count,
-                    errors=error_count
+                    proballers=f"{proballers_success}/{proballers_count}",
+                    flashscore=f"{flashscore_success}/{flashscore_count}"
                 )
 
         if player.games:
             report.players[playerIndex].team = player.games[-1].player_team
-
     if in_github_actions:
-        print(f"          • Scraping games - all servers... DONE ({successful_count}/{total_games} successful)")
+        print(f"          • Scraping games - all servers... DONE (Proballers: {proballers_success}/{proballers_count}, Flashscore: {flashscore_success}/{flashscore_count})")
     return report

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from _DClasses.game import Game
-from _Data.teams import getNameAndID
+from _Data.teams import getTeamInfo
 
 @dataclass
 class FlashscoreData:
@@ -37,6 +37,7 @@ class FlashscoreGame:
     date: str
     homeID: str
     awayID: str
+    versus_text: str
     score: str
     home: bool
 
@@ -92,23 +93,27 @@ class FlashscoreGame:
         except ValueError:
             threes_pct = "-"
 
-        [home_team_name, home_team_ID]= getNameAndID("flashscore",self.homeID)
-        [away_team_name, away_team_ID] = getNameAndID("flashscore",self.awayID)
+        homeName = self.versus_text.split(" v ")[0]
+        awayName = self.versus_text.split(" v ")[-1]
+
+        [homeID, homeName, homeSubtext]= getTeamInfo("flashscore",self.homeID,homeName)
+        [awayID, awayName, awaySubtext] = getTeamInfo("flashscore",self.awayID,awayName)
+
         scores = [int(x) for x in self.score.split("-")]
         if self.home:
             score = f"{scores[0]}-{scores[1]}"
             win_loss = "W" if scores[0] > scores[1] else "L"
 
-            player_team_ID = home_team_ID
-            player_team_name = home_team_name
-            versus_text = f"v {away_team_name}"
+            player_team_ID = homeID
+            player_team_name = homeName
+            versus_text = f"v {awayName}"
         else:
             score = f"{scores[1]}-{scores[0]}"
             win_loss = "W" if scores[1] > scores[0] else "L"
 
-            player_team_ID = away_team_ID
-            player_team_name = away_team_name
-            versus_text = f"@ {home_team_name}"
+            player_team_ID = awayID
+            player_team_name = awayName
+            versus_text = f"@ {homeName}"
 
         return Game(
             date = date,

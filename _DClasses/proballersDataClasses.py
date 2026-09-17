@@ -2,13 +2,14 @@ from dataclasses import dataclass
 from datetime import date, datetime
 
 from _DClasses.game import Game
+from _Data.teams import getTeamInfo
 
 @dataclass
 class ProballersData:
     id: str
     name: str
     def getProfileLink(self):
-        return f"https://www.proballers.com/basketball/player/{self.id}/{self.name}/games"
+        return f"https://www.proballers.com/basketball/player/{self.id}/{self.name}"
 
 @dataclass
 class ProballersGame:
@@ -31,7 +32,9 @@ class ProballersGame:
     eff: str
     date: date
     homeID: str
+    homeName: str
     awayID: str
+    awayName: str
     score: str
     home: bool
 
@@ -60,19 +63,25 @@ class ProballersGame:
 
         date = datetime.strptime(self.date, "%b %d, %Y").date()
 
+        
+        [homeID, homeName, homeSubtext]= getTeamInfo("proballers",self.homeID,self.homeName)
+        [awayID, awayName, awaySubtext] = getTeamInfo("proballers",self.awayID,self.awayName)
+
         scores = [int(x) for x in self.score.split("-")]
         if self.home:
             score = f"{scores[0]}-{scores[1]}"
             win_loss = "W" if scores[0] > scores[1] else "L"
 
-            versus_text = f"v {self.away_team}"
-            player_team = self.home_team
+            versus_text = f"v {awayName}"
+            player_team_name = self.homeName
+            player_team_ID = self.homeID
         else:
             score = f"{scores[1]}-{scores[0]}"
             win_loss = "W" if scores[1] > scores[0] else "L"
 
-            versus_text = f"@ {self.home_team}"
-            player_team = self.away_team
+            versus_text = f"@ {homeName}"
+            player_team_name = self.awayName
+            player_team_ID = self.awayID
 
         try:
             twosMade = twos.split("-")[0]
@@ -119,6 +128,6 @@ class ProballersGame:
             to = to,
             pfs = pfs,
             plus_minus = plus_minus,
-            eff = eff,
-            player_team = player_team
+            player_team=player_team_name,
+            player_team_ID=player_team_ID
         )

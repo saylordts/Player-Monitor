@@ -79,7 +79,6 @@ def findDateOnePlayer(link: str):
     return dates_links
 
 def scrapeOneGame(link: str, player: Player):
-    print(link)
     try:
         page = requests.get(link, headers=headers, timeout=20)
         page.raise_for_status()
@@ -115,15 +114,21 @@ def scrapeOneGame(link: str, player: Player):
     team_info = soup.find(
         "div", class_="home-game__content__result__final-score__content"
     )
-    awayID = team_info.find("div", class_="home-game__content__result__final-score__team home-game__content__result__final-score__team--right").h2.a.text.strip()
-    homeID = team_info.find("div", class_="home-game__content__result__final-score__team").h2.a.text.strip()
+    awayTeam = team_info.find("div", class_="home-game__content__result__final-score__team home-game__content__result__final-score__team--right").h2.a
+    awayName = awayTeam.text.strip()
+    awayID = awayTeam["href"].split("/")[3]
+    homeTeam = team_info.find("div", class_="home-game__content__result__final-score__team").h2.a
+    homeName = homeTeam.text.strip()
+    homeID = homeTeam["href"].split("/")[3]
     
     table_drawers = [table_drawer.text.strip() for table_drawer in table_drawers]
 
     game = ProballersGame(
         date = date,
         homeID = homeID,
+        homeName = homeName,
         awayID = awayID,
+        awayName = awayName,
         score = score,
         home = home,
         pts = table_drawers[1],

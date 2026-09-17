@@ -136,6 +136,8 @@ def scrapeOneGame(link: str, player: Player):
         )
     score = title_score["content"].rsplit(" ", 1)[-1]
 
+    versus_text = title.split(",")[0][:-11].strip()
+
     game = FlashscoreGame(
         pts = stats[0],
         reb = stats[1],
@@ -160,6 +162,7 @@ def scrapeOneGame(link: str, player: Player):
         date = date,
         homeID = homeID,
         awayID = awayID,
+        versus_text = versus_text,
         score = score,
         home = home
     ).toGame()
