@@ -14,11 +14,12 @@ def getTeamInfo(source: str, sourceID: str, sourceName: str):
     for row in savedDF.itertuples(index=False):
         canonicalID, proballersID, flashscoreID, teamName, teamSubtext = row
         if source == "proballers":
-            if proballersID == sourceID:
-                return canonicalID, teamName, teamSubtext
+            savedID = proballersID
         elif source == "flashscore":
-            if flashscoreID == sourceID:
-                return canonicalID, teamName, teamSubtext
+            savedID = flashscoreID
+
+        if pd.notna(savedID) and savedID == sourceID:
+            return canonicalID, teamName, teamSubtext
 
     tempFile = "_Data/tempTeams.csv"
     tempDF = pd.read_csv(
@@ -31,7 +32,11 @@ def getTeamInfo(source: str, sourceID: str, sourceName: str):
 
     for row in tempDF.itertuples(index=False):
         teamName, proballersID, flashscoreID = row
-        if (source == "proballers" and sourceID == proballersID) or (source == "flashscore" and sourceID == flashscoreID): return "0000", sourceName+"?", ""
+        if source == "proballers":
+            tempID = proballersID
+        elif source == "flashscore":
+            tempID = flashscoreID
+        if pd.notna(tempID) and tempID == sourceID: return "0000", sourceName+"?", ""
 
     columns = tempDF.columns.tolist()
 
