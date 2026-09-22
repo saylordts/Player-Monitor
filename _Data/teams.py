@@ -15,10 +15,10 @@ def getTeamInfo(source: str, sourceID: str, sourceName: str):
         canonicalID, proballersID, flashscoreID, teamName, teamSubtext = row
         if source == "proballers":
             if proballersID == sourceID:
-                return canonicalID, teamName
+                return canonicalID, teamName, teamSubtext
         elif source == "flashscore":
             if flashscoreID == sourceID:
-                return canonicalID, teamName
+                return canonicalID, teamName, teamSubtext
 
     tempFile = "_Data/tempTeams.csv"
     tempDF = pd.read_csv(
