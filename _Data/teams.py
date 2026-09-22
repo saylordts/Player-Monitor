@@ -28,6 +28,11 @@ def getTeamInfo(source: str, sourceID: str, sourceName: str):
             "flashscoreID": "string"
         }
     )
+
+    for row in tempDF.itertuples(index=False):
+        teamName, proballersID, flashscoreID = row
+        if (source == "proballers" and sourceID == proballersID) or (source == "flashscore" and sourceID == flashscoreID): return "0000", sourceName+"?", ""
+
     columns = tempDF.columns.tolist()
 
     for row in tempDF.itertuples(index=False):
