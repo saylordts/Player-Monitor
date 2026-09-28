@@ -1,4 +1,5 @@
 from datetime import date
+from _DClasses.player import Player
 from _DClasses.report import Report
 from _DClasses.game import Game
 
@@ -116,11 +117,8 @@ def noGames(last_game_date: str):
 """
 
 def noGamesPlayers(report: Report, noGameIndexes: list):
-    playerTexts = []
-
-    for playerIndex in noGameIndexes:
-        player = report.players[playerIndex]
-        playerTexts.append(f"<span style='white-space: nowrap;'>{player.name} ({player.last_game})</span>")
+    players = [report.players[i] for i in noGameIndexes]
+    numOfPlayers = len(players)
 
     text = """
     <mj-section mj-class="nogame-section">
@@ -128,19 +126,22 @@ def noGamesPlayers(report: Report, noGameIndexes: list):
         <mj-text mj-class="nogame-text">
           """
 
-    if len(playerTexts) == 1:
-        text += f"No recent games for {playerTexts[0]}"
-    elif len(playerTexts) == 2:
-        text += f"No recent games for {playerTexts[0]} or {playerTexts[1]}"
+    if numOfPlayers == 1:
+        text += f"No recent games for <span style='white-space: nowrap;'>{players[0].name} ({players[0].last_game})</span>"
+    if numOfPlayers == 2:
+        text += f"No recent games for <span style='white-space: nowrap;'>{players[0].name} ({players[0].last_game})</span> or <span style='white-space: nowrap;'>{players[1].name} ({players[1].last_game})</span>"
     else:
-        text += f"No recent games for {', '.join(playerTexts[:-1])}, or {playerTexts[-1]}"
+        text += f"No recent games for <span style='white-space: nowrap;'>{players[0].name} ({players[0].last_game})"
+        for player in players[1:-1]:
+            text += f",</span> <span style='white-space: nowrap;'> {player.name} ({player.last_game})"
+        text += f",</span> or <span style='white-space: nowrap;'> {players[-1].name} ({players[-1].last_game})</span>"
+
     text += """
         </mj-text>
       </mj-column>
     </mj-section>
 """
     return text
-
 
 def footer():
     return """
