@@ -9,8 +9,9 @@ from overallEdit import overallEdit
 from Change import Change
 
 def teamsUpdater():
+    tempFile = "_Data/tempTeams.csv"
     tempDF = pd.read_csv(
-        "_Data/tempTeams.csv",
+        tempFile,
         dtype={
             "proballersID": "string",
             "flashscoreID": "string"
@@ -28,14 +29,19 @@ def teamsUpdater():
 
     allChanges: list[Change] = []
 
-    tempDF = consolidateTempDF(tempDF)
+    consolidateResults = consolidateTempDF(tempDF)
+    if consolidateResults[0] == "quit": return
+    tempDF = consolidateResults[1]
 
-    for tempRow in tempDF.itertuples(index=False):
+
+    for tempRow in tempDF.itertuples():
         update = updateRow(tempRow,savedDF)
         if update[0] == "quit": return
         if update[0] == "skip": continue
         allChanges.append(update[1])
-    if not allChanges: return
+    if not allChanges: 
+        print("No changes")
+        return
 
     errorMessage = ""
 
@@ -82,8 +88,9 @@ def teamsUpdater():
         choice = input("\nSave these changes? (Y/n/e): ")   
 
         if choice.lower() in ["y", ""]:
-            savedDF = saveChanges(savedDF, allChanges)
-            savedDF.to_csv(savedFile, index=False) 
+            saveResults = saveChanges(savedDF, tempDF, allChanges)
+            saveResults[0].to_csv(savedFile, index=False)
+            saveResults[1].to_csv(tempFile, index=False)
             return
 
         if choice.lower() == "n": return

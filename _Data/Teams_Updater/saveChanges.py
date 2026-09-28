@@ -2,7 +2,7 @@ import pandas as pd
 from Change import Change
 
 
-def saveChanges(savedDF: pd.DataFrame, allChanges: list[Change]):
+def saveChanges(savedDF: pd.DataFrame,tempDF: pd.DataFrame, allChanges: list[Change]):
 
     columns = savedDF.columns.tolist()
     for change in allChanges:
@@ -16,7 +16,9 @@ def saveChanges(savedDF: pd.DataFrame, allChanges: list[Change]):
             if change.flashscoreChange():
                 savedDF.loc[savedDF['canonicalID'] == change.canonicalID, "flashscoreID"] = change.newFlashscoreID
 
-    return savedDF
+        tempDF = tempDF.drop(index=change.tempIndex)
+
+    return savedDF, tempDF
 
 def getNextCanonicalID(savedDF):
     if savedDF.empty: return "0001"

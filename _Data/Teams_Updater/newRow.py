@@ -6,7 +6,7 @@ from Change import Change
 
 
 def newRow(tempRow,tempID):
-    tempTeamName, tempProballersID, tempFlashscoreID = tempRow
+    tempIndex, tempTeamName, tempProballersID, tempFlashscoreID = tempRow
 
     subprocess.run("cls", shell=True)
 
@@ -44,6 +44,7 @@ def newRow(tempRow,tempID):
         teamName=saveName,
         newProballersID=newProballersID,
         newFlashscoreID=newFlashscoreID,
-        teamSubtext=saveSubtext
+        teamSubtext=saveSubtext,
+        tempIndex=tempIndex
     )
     return ("new", change)

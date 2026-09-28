@@ -8,7 +8,7 @@ from Change import Change
 
 
 def updateRow(tempRow, savedDF) -> tuple[str, Change | None]: 
-    tempTeamName, tempProballersID, tempFlashscoreID = tempRow
+    tempIndex, tempTeamName, tempProballersID, tempFlashscoreID = tempRow
     tempID = ""
     
     if not pd.isna(tempProballersID):
@@ -42,7 +42,7 @@ def updateRow(tempRow, savedDF) -> tuple[str, Change | None]:
         if selected[1] is None:
             break
     
-        selected_name, selected_score, selected_index = selected[1]
+        selected_name, _, selected_index = selected[1]
         selected_team = savedDF.iloc[selected_index]
         change = Change(
             type="update",
@@ -50,7 +50,8 @@ def updateRow(tempRow, savedDF) -> tuple[str, Change | None]:
             canonicalID=selected_team["canonicalID"],
             oldProballersID=selected_team["proballersID"],
             oldFlashscoreID=selected_team["flashscoreID"],
-            teamSubtext=selected_team["teamSubtext"]
+            teamSubtext=selected_team["teamSubtext"],
+            tempIndex=tempIndex
         )
         if not pd.isna(tempFlashscoreID):
             change.newFlashscoreID = tempFlashscoreID

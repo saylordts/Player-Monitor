@@ -30,7 +30,7 @@ def consolidateTempDF(tempDF: pd.DataFrame) -> pd.DataFrame:
                 tempDF = chooseResults[1]
                 changed = True
                 break
-        if not changed: return tempDF
+        if not changed: return ("complete", tempDF)
 
 
 def chooseMatch(tempRow, matches, tempDF):
@@ -49,8 +49,8 @@ def chooseMatch(tempRow, matches, tempDF):
             print(
                 f"{matchIndex}."
                 f"{team["teamName"]}"
-                f"{idText}"
-                f"Score: {score}"
+                f"\n{idText}"
+                f"\nScore: {score}"
             )
 
         choice = input("\nSelect team to merge (Enter or 0 for none, q to quit): ")

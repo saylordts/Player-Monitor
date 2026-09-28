@@ -34,9 +34,6 @@ def selectMatch(tempTeamName, tempID, matches, savedDF):
         if choice.lower() == "s":
             return ("skip", None)
         
-        if choice == "":
-            return ("found", matches[0])
-        
         if not choice.isdigit():
             errorMessage = "Please enter a number."
             continue
