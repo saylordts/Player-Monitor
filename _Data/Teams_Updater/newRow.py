@@ -5,8 +5,16 @@ import pandas as pd
 from Change import Change
 
 
-def newRow(tempRow,tempID):
-    tempIndex, tempTeamName, tempProballersID, tempFlashscoreID = tempRow
+def newRow(tempRow):
+    tempIndex, tempTeamName, tempProballersID, tempFlashscoreID, tempLink = tempRow
+    tempID = ""
+    
+    if not pd.isna(tempProballersID):
+        tempID += f"PROBALLERS ID: {tempProballersID}"
+    if not pd.isna(tempProballersID) and not pd.isna(tempFlashscoreID): 
+        tempID += "; "
+    if not pd.isna(tempFlashscoreID):
+        tempID += f"FLASHSCORE ID: {tempFlashscoreID}"
 
     subprocess.run("cls", shell=True)
 
@@ -28,6 +36,7 @@ def newRow(tempRow,tempID):
     print("============================================================")
     print(f"NEW TEAM: {saveName}")
     print(tempID)
+    print(f"Game link: {tempLink}")
     print("============================================================")
     print("Key Binds: Enter to leave blank; q to quit, s to skip")
 
@@ -45,6 +54,7 @@ def newRow(tempRow,tempID):
         newProballersID=newProballersID,
         newFlashscoreID=newFlashscoreID,
         teamSubtext=saveSubtext,
-        tempIndex=tempIndex
+        tempIndex=tempIndex,
+        tempLink=tempLink
     )
     return ("new", change)

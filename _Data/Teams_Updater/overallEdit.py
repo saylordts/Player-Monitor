@@ -105,10 +105,12 @@ def editOne(allChanges: list[Change], changeIndex: int) -> tuple[str, list[Chang
         choice = int(choice)
 
         if choice == 1:
+            print(f"Game Link: {change.tempLink}")
             rename = input("\nInput New Team Name: ")
             if rename: allChanges[changeIndex].teamName = rename
             continue
         if choice == 2:
+            print(f"Game Link: {change.tempLink}")
             rename = input("\nInput New Team Subtext: ")
             if rename: allChanges[changeIndex].teamSubtext = rename
             continue

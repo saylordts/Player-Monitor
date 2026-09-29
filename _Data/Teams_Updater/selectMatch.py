@@ -1,7 +1,18 @@
 import subprocess
 
+import pandas as pd
 
-def selectMatch(tempTeamName, tempID, matches, savedDF):
+
+def selectMatch(tempRow, matches, savedDF):
+    _, tempTeamName, tempProballersID, tempFlashscoreID, tempLink = tempRow
+    tempID = ""
+    
+    if not pd.isna(tempProballersID):
+        tempID += f"PROBALLERS ID: {tempProballersID}"
+    if not pd.isna(tempProballersID) and not pd.isna(tempFlashscoreID): 
+        tempID += "; "
+    if not pd.isna(tempFlashscoreID):
+        tempID += f"FLASHSCORE ID: {tempFlashscoreID}"
     errorMessage = ""
 
     if not matches: return ("none found", None)
@@ -12,6 +23,7 @@ def selectMatch(tempTeamName, tempID, matches, savedDF):
         print("============================================================")
         print(f"UNRECOGNIZED TEAM: {tempTeamName}")
         print(tempID)
+        print(f"Game Link: {tempLink}")
         print("============================================================")
 
         for matchIndex, match in enumerate(matches):
@@ -23,6 +35,7 @@ def selectMatch(tempTeamName, tempID, matches, savedDF):
                 f"{matchIndex+1}."
                 f"  {score:5.1f}%  "
                 f"{team['teamName']} "
+                f"({team['teamSubtext']}) "
                 f"({team['canonicalID']})"
             )
 

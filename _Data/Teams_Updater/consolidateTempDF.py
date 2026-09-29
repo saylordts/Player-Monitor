@@ -10,7 +10,7 @@ def consolidateTempDF(tempDF: pd.DataFrame) -> pd.DataFrame:
     while True:
         changed = False
         for tempRow in tempDF.itertuples():
-            tempIndex, tempTeamName, _, _ = tempRow 
+            tempIndex, tempTeamName, _, _, _ = tempRow 
             matches = process.extract(
                 tempTeamName,
                 tempDF["teamName"],
@@ -34,13 +34,14 @@ def consolidateTempDF(tempDF: pd.DataFrame) -> pd.DataFrame:
 
 
 def chooseMatch(tempRow, matches, tempDF):
-    _, tempTeamName, tempProballersID, tempFlashscoreID = tempRow 
+    _, tempTeamName, tempProballersID, tempFlashscoreID, tempLink = tempRow 
     tempIdText = f"Proballers ID: {tempProballersID}" if not pd.isna(tempProballersID) else f"Flashscore ID: {tempFlashscoreID}"
     errorMessage = ""
     while True:
         subprocess.run("cls", shell=True)
         if errorMessage: print(errorMessage)
         print(f"Matches found for {tempTeamName} ({tempIdText})")
+        print(f"Game Link: {tempLink}")
         print()
         for matchIndex, match in enumerate(matches, start=1):
             _, score, dfIndex = match
@@ -48,9 +49,10 @@ def chooseMatch(tempRow, matches, tempDF):
             idText = f"Proballers ID: {team['proballersID']}" if not pd.isna(team['proballersID']) else f"Flashscore ID: {team['flashscoreID']}"
             print(
                 f"{matchIndex}."
-                f"{team["teamName"]}"
+                f"{team['teamName']}"
                 f"\n{idText}"
                 f"\nScore: {score}"
+                f"\nGame Link: {team['gameSite']}"
             )
 
         choice = input("\nSelect team to merge (Enter or 0 for none, q to quit): ")
@@ -70,9 +72,9 @@ def chooseMatch(tempRow, matches, tempDF):
             return ("complete", combineResults[1])
 
 def combineMatch(originalRow, newMatch, tempDF:pd.DataFrame):
-    originalIndex, originalTeamName, originalProballersID, originalFlashscoreID = originalRow
+    originalIndex, originalTeamName, originalProballersID, originalFlashscoreID, originalLink = originalRow
     _, _, matchIndex = newMatch
-    matchTeamName, matchProballersID, matchFlashscoreID = tempDF.iloc[matchIndex]
+    matchTeamName, matchProballersID, matchFlashscoreID, matchLink = tempDF.iloc[matchIndex]
     errorMessage = ""
     while True:
         subprocess.run("cls", shell=True)
@@ -96,6 +98,6 @@ def combineMatch(originalRow, newMatch, tempDF:pd.DataFrame):
     tempDF = tempDF.drop(index=[matchIndex, originalIndex])
     
     columns = tempDF.columns.tolist()
-    newRow = pd.DataFrame([[teamName,proballersID,flashscoreID]],columns=columns)
+    newRow = pd.DataFrame([[teamName,proballersID,flashscoreID," or ".join([originalLink, matchLink])]],columns=columns)
     tempDF = pd.concat([tempDF, newRow], ignore_index=True)
     return ("complete", tempDF)

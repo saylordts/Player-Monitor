@@ -8,15 +8,7 @@ from Change import Change
 
 
 def updateRow(tempRow, savedDF) -> tuple[str, Change | None]: 
-    tempIndex, tempTeamName, tempProballersID, tempFlashscoreID = tempRow
-    tempID = ""
-    
-    if not pd.isna(tempProballersID):
-        tempID += f"PROBALLERS ID: {tempProballersID}"
-    if not pd.isna(tempProballersID) and not pd.isna(tempFlashscoreID): 
-        tempID += "; "
-    if not pd.isna(tempFlashscoreID):
-        tempID += f"FLASHSCORE ID: {tempFlashscoreID}"
+    tempIndex, tempTeamName, tempProballersID, tempFlashscoreID, tempLink = tempRow
     matches = process.extract(
         tempTeamName,
         savedDF["teamName"],
@@ -27,8 +19,7 @@ def updateRow(tempRow, savedDF) -> tuple[str, Change | None]:
 
     while True:
         selected = selectMatch(
-            tempTeamName, 
-            tempID,
+            tempRow,
             matches,
             savedDF
         )
@@ -51,7 +42,8 @@ def updateRow(tempRow, savedDF) -> tuple[str, Change | None]:
             oldProballersID=selected_team["proballersID"],
             oldFlashscoreID=selected_team["flashscoreID"],
             teamSubtext=selected_team["teamSubtext"],
-            tempIndex=tempIndex
+            tempIndex=tempIndex,
+            tempLink=tempLink
         )
         if not pd.isna(tempFlashscoreID):
             change.newFlashscoreID = tempFlashscoreID
@@ -64,4 +56,4 @@ def updateRow(tempRow, savedDF) -> tuple[str, Change | None]:
             continue
 
         return ("update", change)
-    return newRow(tempRow,tempID)
+    return newRow(tempRow)

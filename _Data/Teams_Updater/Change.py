@@ -9,6 +9,7 @@ class Change:
     teamName: str
     teamSubtext: str
     tempIndex: int
+    tempLink: str
     canonicalID: str | None = None
     oldProballersID: str | None = None
     newProballersID: str | None = None
