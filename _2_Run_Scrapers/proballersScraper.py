@@ -147,7 +147,8 @@ def scrapeOneGame(link: str, player: Player):
         blk = table_drawers[16],
         pfs = table_drawers[17],
         plus_minus = table_drawers[19],
-        eff = table_drawers[20]
+        eff = table_drawers[20],
+        link = link
     ).toGame()
 
     return game

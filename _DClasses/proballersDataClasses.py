@@ -37,6 +37,7 @@ class ProballersGame:
     awayName: str
     score: str
     home: bool
+    link: str
 
     def toGame(self):
         def clean_stat(stat):
@@ -64,8 +65,8 @@ class ProballersGame:
         date = datetime.strptime(self.date, "%b %d, %Y").date()
 
         
-        [homeID, homeName, homeSubtext]= getTeamInfo("proballers",self.homeID,self.homeName)
-        [awayID, awayName, awaySubtext] = getTeamInfo("proballers",self.awayID,self.awayName)
+        [homeID, homeName, homeSubtext]= getTeamInfo("proballers",self.homeID,self.homeName,self.link)
+        [awayID, awayName, awaySubtext] = getTeamInfo("proballers",self.awayID,self.awayName,self.link)
 
         scores = [int(x) for x in self.score.split("-")]
         if self.home:

@@ -1,7 +1,8 @@
 import pandas as pd
 
-def getTeamInfo(source: str, sourceID: str, sourceName: str):
+def getTeamInfo(source: str, sourceID: str, sourceName: str, sourceLink: str):
 
+    # read in saved file
     savedDF = pd.read_csv(
         "_Data/teams.csv",
         dtype={
@@ -11,6 +12,7 @@ def getTeamInfo(source: str, sourceID: str, sourceName: str):
         }
     )
 
+    # check if team exists in the saved file
     for row in savedDF.itertuples(index=False):
         canonicalID, proballersID, flashscoreID, teamName, teamSubtext = row
         if source == "proballers":
@@ -21,6 +23,7 @@ def getTeamInfo(source: str, sourceID: str, sourceName: str):
         if pd.notna(savedID) and savedID == sourceID:
             return canonicalID, teamName, teamSubtext
 
+    # read in temp file
     tempFile = "_Data/tempTeams.csv"
     tempDF = pd.read_csv(
         tempFile,
@@ -30,8 +33,9 @@ def getTeamInfo(source: str, sourceID: str, sourceName: str):
         }
     )
 
+    # check if team exists in temp file based on source ID
     for row in tempDF.itertuples(index=False):
-        teamName, proballersID, flashscoreID = row
+        teamName, proballersID, flashscoreID, _ = row
         if source == "proballers":
             tempID = proballersID
         elif source == "flashscore":
@@ -40,22 +44,14 @@ def getTeamInfo(source: str, sourceID: str, sourceName: str):
 
     columns = tempDF.columns.tolist()
 
-    for row in tempDF.itertuples(index=False):
-        teamName, proballersID, flashscoreID = row
-        if sourceName == teamName:
-            if source == "proballers" and pd.isna(proballersID):
-                tempDF.loc[tempDF['teamName'] == sourceName, "proballersID"] = sourceID
-                tempDF.to_csv(tempFile, index=False)
-            elif source == "flashscore" and pd.isna(flashscoreID):
-                tempDF.loc[tempDF['teamName'] == sourceName, "flashscoreID"] = sourceID
-                tempDF.to_csv(tempFile, index=False)
-            return "0000", sourceName+"?", ""
-
+    # create new row for unmatched teams
     if source == "proballers":
-        new_row = pd.DataFrame([[sourceName, str(sourceID), pd.NA]], columns=columns)
+        new_row = pd.DataFrame([[sourceName, str(sourceID), pd.NA, sourceLink]], columns=columns)
     elif source == "flashscore":
-        new_row = pd.DataFrame([[sourceName, pd.NA, str(sourceID)]], columns=columns)
-    tempDF = pd.concat([tempDF, new_row], ignore_index=True)
+        new_row = pd.DataFrame([[sourceName, pd.NA, str(sourceID), sourceLink]], columns=columns)
 
+    # save to temp file
+    tempDF = pd.concat([tempDF, new_row], ignore_index=True)
     tempDF.to_csv(tempFile, index=False)
+
     return "0000", sourceName+"?", ""

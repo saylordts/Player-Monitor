@@ -40,6 +40,7 @@ class FlashscoreGame:
     versus_text: str
     score: str
     home: bool
+    link: str
 
     def toGame(self):
         def clean_stat(stat):
@@ -96,8 +97,8 @@ class FlashscoreGame:
         homeName = self.versus_text.split(" v ")[0]
         awayName = self.versus_text.split(" v ")[-1]
 
-        [homeID, homeName, homeSubtext]= getTeamInfo("flashscore",self.homeID,homeName)
-        [awayID, awayName, awaySubtext] = getTeamInfo("flashscore",self.awayID,awayName)
+        [homeID, homeName, homeSubtext]= getTeamInfo("flashscore",self.homeID,homeName,self.link)
+        [awayID, awayName, awaySubtext] = getTeamInfo("flashscore",self.awayID,awayName,self.link)
 
         scores = [int(x) for x in self.score.split("-")]
         if self.home:

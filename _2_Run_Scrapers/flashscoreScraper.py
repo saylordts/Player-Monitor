@@ -164,7 +164,8 @@ def scrapeOneGame(link: str, player: Player):
         awayID = awayID,
         versus_text = versus_text,
         score = score,
-        home = home
+        home = home,
+        link = link
     ).toGame()
 
     return game
