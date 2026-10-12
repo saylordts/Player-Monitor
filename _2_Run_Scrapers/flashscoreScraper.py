@@ -80,7 +80,7 @@ def findDatesOnePlayer(link: str):
     json_text = data.split("window.playerProfilePageEnvironment = ")[1]
     json_text = json_text.split(";\n")[0]
     player_data = json.loads(json_text)
-    last_matches = player_data["lastMatchesData"]["lastMatches"][:5]
+    last_matches = player_data["lastMatchesData"]["lastMatches"]
 
     dates_links = []
     for match in last_matches:
