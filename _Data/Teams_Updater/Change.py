@@ -32,12 +32,14 @@ class Change:
             text += f" -> {self.newFlashscoreID}"
         return text
     def proballersChange(self) -> bool:
-        return (
-            self.newProballersID is not None
-            and self.newProballersID != self.oldProballersID
-        )
+        if pd.isna(self.newProballersID):
+            return False
+        oldProballersID = None if pd.isna(self.oldProballersID) else self.oldProballersID
+
+        return oldProballersID != self.newProballersID
     def flashscoreChange(self) -> bool:
-        return (
-            self.newFlashscoreID is not None
-            and self.newFlashscoreID != self.oldFlashscoreID
-        )
+        if pd.isna(self.newFlashscoreID):
+            return False
+        oldFlashscoreID = None if pd.isna(self.oldFlashscoreID) else self.oldFlashscoreID
+
+        return oldFlashscoreID != self.newFlashscoreID
