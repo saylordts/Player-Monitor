@@ -71,7 +71,7 @@ def playerHeader(player_name: str, player_team: str):
 
 
 def singleGame(game: Game):
-    [GS, GS36, TS] = game.getStats()
+    [GS, GS36, TS, mins] = game.getStats()
     return f"""
     <mj-section mj-class="game-section">
       <mj-column mj-class="game-column">
@@ -80,7 +80,7 @@ def singleGame(game: Game):
             <span style="white-space:nowrap;">{game.date.strftime("%b %d, %Y")} {game.versus_text}</span>
             <span style="white-space:nowrap; display:inline-block; margin-left:20px;">{game.win_loss} {game.score}</span>
           </div>
-            {game.pts} PTS | {game.reb} REB ({game.oreb} / {game.dreb}) | {game.ast} AST | {game.mins} MIN<br/>
+            {game.pts} PTS | {game.reb} REB ({game.oreb} / {game.dreb}) | {game.ast} AST | {mins} MIN<br/>
             FG {game.fgs} ({game.fg_pct}) | FT {game.fts} ({game.ft_pct}) <br/>
             2PT {game.twos} ({game.twos_pct}) | 3PT {game.threes} ({game.threes_pct}) <br/>
           	{game.stl} STL | {game.blk} BLK | {game.to} TO | {game.pfs} PF <br/>

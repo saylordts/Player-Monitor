@@ -42,9 +42,11 @@ class Game:
         blk = int(self.blk)
         pf = int(self.pfs)
         tov = int(self.to)
+        mins = float(self.mins)
         GS = pts + 0.4*fgm - 0.7*fga - 0.4*(fta-ftm) + 0.7*orb + 0.3*drb + stl +0.7*ast + 0.7*blk - 0.4*pf - tov
-        GS36 = str(round(GS/36,1))
+        GS36 = str(round(GS/mins*36,1))
         GS = str(round(GS))
+        mins = str(round(mins,1))
         TS = pts / 2 / (fga + .44*fta) * 100
         TS = str(round(TS,1)) + "%"
-        return GS, GS36, TS
+        return GS, GS36, TS, mins

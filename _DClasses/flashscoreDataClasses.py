@@ -47,10 +47,17 @@ class FlashscoreGame:
             if stat is None or stat.strip() in ["", "-"]:
                 return "0"
             return stat.strip()
+        def convert_mins_to_decimal(mins):
+            if mins is None or mins.strip() in ["", "-"]:
+                return "0"
+            parts = mins.split(":")
+            if len(parts) == 2:
+                return str(int(parts[0]) + int(parts[1]) / 60)
+            return "0"
         pts = clean_stat(self.pts)
         reb = clean_stat(self.reb)
         ast = clean_stat(self.ast)
-        min = clean_stat(self.min)
+        min = convert_mins_to_decimal(self.min)
         fgMade = clean_stat(self.fgMade)
         fgAtt = clean_stat(self.fgAtt)
         twosMade = clean_stat(self.twosMade)
