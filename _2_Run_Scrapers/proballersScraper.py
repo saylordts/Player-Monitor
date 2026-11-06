@@ -38,7 +38,7 @@ def findDates(report: Report):
     for playerIndex, player in enumerate(player_iterator):
         link = player.playerData.proballers.getProfileLink()
         try:
-            dates_links = findDateOnePlayer(link)
+            dates_links = findDatesOnePlayer(link)
             report.players[playerIndex].found_games.proballers = dates_links
         except requests.RequestException as e:
             errorText = f"Failed to scrape {link}: {e}"
@@ -50,7 +50,7 @@ def findDates(report: Report):
 
     return report
 
-def findDateOnePlayer(link: str):
+def findDatesOnePlayer(link: str):
     try:
         page = requests.get(link, headers=headers, timeout=20)
         page.raise_for_status()
