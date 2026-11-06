@@ -42,19 +42,6 @@ def runScrapers(report: Report):
         gamesScraped = 0
         while gamesScraped < 5:
             for date in dates:
-                if date in [game.date for game in pb_games]:
-                    link = getLinkFromDate(player, date, "proballers")
-                    proballers_count += 1
-                    try:
-                        game = pb.scrapeOneGame(link, player)
-                        if game:
-                            report.players[playerIndex].games.append(game)
-                            proballers_success += 1
-                            report.players[playerIndex].team = game.player_team
-                            gamesScraped += 1
-                            continue
-                    except PlayerScrapeError as e:
-                        report.errors.append(str(e))
                 if date in [game.date for game in fs_games]:
                     link = getLinkFromDate(player, date, "flashscore")
                     flashscore_count += 1
@@ -63,6 +50,19 @@ def runScrapers(report: Report):
                         if game:
                             report.players[playerIndex].games.append(game)
                             flashscore_success += 1
+                            report.players[playerIndex].team = game.player_team
+                            gamesScraped += 1
+                            continue
+                    except PlayerScrapeError as e:
+                        report.errors.append(str(e))
+                if date in [game.date for game in pb_games]:
+                    link = getLinkFromDate(player, date, "proballers")
+                    proballers_count += 1
+                    try:
+                        game = pb.scrapeOneGame(link, player)
+                        if game:
+                            report.players[playerIndex].games.append(game)
+                            proballers_success += 1
                             report.players[playerIndex].team = game.player_team
                             gamesScraped += 1
                             continue
