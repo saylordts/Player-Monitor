@@ -2,10 +2,10 @@ import subprocess
 
 import pandas as pd
 
-from consolidateTempDF import consolidateTempDF
-from saveChanges import saveChanges
-from updateRow import updateRow
-from overallEdit import overallEdit
+from _1_Consolidate_Results.consolidateTempDF import consolidateTempDF
+from _2_Check_Saved_Teams.updateRow import updateRow
+from _4_Edit_Changes.overallEdit import overallEdit
+from _5_Save_Changes.saveChanges import saveChanges
 from Change import Change
 
 def teamsUpdater():

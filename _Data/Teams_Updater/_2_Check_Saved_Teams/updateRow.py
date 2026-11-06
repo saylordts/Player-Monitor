@@ -1,9 +1,9 @@
 import pandas as pd
 from rapidfuzz import process, fuzz
 
-from confirmMatch import confirmMatch
-from newRow import newRow
-from selectMatch import selectMatch
+from _2_Check_Saved_Teams.confirmMatch import confirmMatch
+from _2_Check_Saved_Teams.selectMatch import selectMatch
+from _3_Create_New_Teams.newRow import newRow
 from Change import Change
 
 

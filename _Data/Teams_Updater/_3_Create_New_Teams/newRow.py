@@ -21,6 +21,7 @@ def newRow(tempRow):
     print("============================================================")
     print(f"UNRECOGNIZED TEAM: {tempTeamName}")
     print(tempID)
+    print(f"Game link: {tempLink}")
     print("============================================================")
     print(f"No accepted matches; creating new saved team")
 
