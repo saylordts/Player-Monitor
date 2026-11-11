@@ -37,44 +37,46 @@ def runScrapers(report: Report):
         for fs_game in fs_games:
             if fs_game.date not in dates:
                 dates.append(fs_game.date)
-        dates.sort()
+        dates.sort(reverse=True)
 
         gamesScraped = 0
-        while gamesScraped < 5:
-            for date in dates:
-                if date in [game.date for game in fs_games]:
-                    link = getLinkFromDate(player, date, "flashscore")
-                    flashscore_count += 1
-                    try:
-                        game = fs.scrapeOneGame(link, player)
-                        if game:
-                            report.players[playerIndex].games.append(game)
-                            flashscore_success += 1
-                            report.players[playerIndex].team = game.player_team
-                            gamesScraped += 1
-                            continue
-                    except PlayerScrapeError as e:
-                        report.errors.append(str(e))
-                if date in [game.date for game in pb_games]:
-                    link = getLinkFromDate(player, date, "proballers")
-                    proballers_count += 1
-                    try:
-                        game = pb.scrapeOneGame(link, player)
-                        if game:
-                            report.players[playerIndex].games.append(game)
-                            proballers_success += 1
-                            report.players[playerIndex].team = game.player_team
-                            gamesScraped += 1
-                            continue
-                    except PlayerScrapeError as e:
-                        report.errors.append(str(e))
-            break
+        for date in dates:
+            if date in [game.date for game in fs_games]:
+                link = getLinkFromDate(player, date, "flashscore")
+                flashscore_count += 1
+                try:
+                    game = fs.scrapeOneGame(link, player)
+                    if game:
+                        report.players[playerIndex].games.append(game)
+                        flashscore_success += 1
+                        report.players[playerIndex].team = game.player_team
+                        gamesScraped += 1
+                        if gamesScraped >= 5:
+                            break
+                        continue
+                except PlayerScrapeError as e:
+                    report.errors.append(str(e))
+            if date in [game.date for game in pb_games]:
+                link = getLinkFromDate(player, date, "proballers")
+                proballers_count += 1
+                try:
+                    game = pb.scrapeOneGame(link, player)
+                    if game:
+                        report.players[playerIndex].games.append(game)
+                        proballers_success += 1
+                        report.players[playerIndex].team = game.player_team
+                        gamesScraped += 1
+                        if gamesScraped >= 5:
+                            break
+                        continue
+                except PlayerScrapeError as e:
+                    report.errors.append(str(e))
         
         if not in_github_actions:
             player_iterator.set_postfix(
                 proballers=f"{proballers_success}/{proballers_count}",
                 flashscore=f"{flashscore_success}/{flashscore_count}"
-        )
+            )
     return report
 
 def getLinkFromDate(player, date, source):

@@ -1,2 +1,1 @@
-1. Investigate why it can produce >5 games/player
-2. Change shown minutes into MM:SS
+1. None
