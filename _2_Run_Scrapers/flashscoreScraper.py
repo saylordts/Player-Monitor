@@ -111,8 +111,12 @@ def scrapeOneGame(link: str, player: Player):
     homeID = link.split("/")[5].split("-")[-1]
     awayID = link.split("/")[6].split("-")[-1]
     allPlayers = playerPage.text.split("PA÷")
-    homePlayers = allPlayers[2].split("PJ÷")[1:]
-    awayPlayers = allPlayers[3].split("PJ÷")[1:]
+    try:
+        homePlayers = allPlayers[2].split("PJ÷")[1:]
+        awayPlayers = allPlayers[3].split("PJ÷")[1:]
+    except IndexError:
+        errorMessage = f"Failed to parse player data for game {link}"
+        raise PlayerScrapeError(errorMessage)
 
     playerdata = next((p for p in homePlayers if playerID in p), None)
     if playerdata is None:
