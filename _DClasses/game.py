@@ -44,9 +44,9 @@ class Game:
         tov = int(self.to)
         minsDEC = float(self.mins)
         GS = pts + 0.4*fgm - 0.7*fga - 0.4*(fta-ftm) + 0.7*orb + 0.3*drb + stl +0.7*ast + 0.7*blk - 0.4*pf - tov
-        GS36 = str(round(GS/minsDEC*36,1))
+        GS36 = str(round(GS/minsDEC*36,1)) if minsDEC > 0 else "0"
         GS = str(round(GS))
-        TS = pts / 2 / (fga + .44*fta) * 100
+        TS = pts / 2 / (fga + .44*fta) * 100 if (fga + .44*fta) > 0 else 0
         TS = str(round(TS,1)) + "%"
         mins = int(minsDEC)
         secs = round((minsDEC - mins) * 60)
