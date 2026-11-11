@@ -22,19 +22,20 @@ def main(debug=True):
     print()
 
     if not debug:
-        print("[4/5] Saving results...")
-        savePlayers(report)
-        print("[4/5] Saving results... DONE")
-        print()
-
-        print("[5/5] Sending report...")
+        print("[4/5] Sending report...")
         sendEmail(report)
-        print("[5/5] Sending report... DONE")
+        print("[4/5] Sending report... DONE")
         if report.errors:
             print()
             print(f"[ERR] Sending errors ({len(report.errors)})...")
             sendFailureEmail("\n".join(report.errors))
             print(f"[ERR] Sending errors ({len(report.errors)})... DONE")
+        print()
+
+        print("[5/5] Saving results...")
+        savePlayers(report)
+        print("[5/5] Saving results... DONE")
+
     else:
         if report.errors:
             print(f"{len(report.errors)} error(s) encountered:")
