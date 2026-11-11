@@ -128,7 +128,7 @@ def noGamesPlayers(report: Report, noGameIndexes: list):
 
     if numOfPlayers == 1:
         text += f"No recent games for <span style='white-space: nowrap;'>{players[0].name} ({players[0].last_game})</span>"
-    if numOfPlayers == 2:
+    elif numOfPlayers == 2:
         text += f"No recent games for <span style='white-space: nowrap;'>{players[0].name} ({players[0].last_game})</span> or <span style='white-space: nowrap;'>{players[1].name} ({players[1].last_game})</span>"
     else:
         text += f"No recent games for <span style='white-space: nowrap;'>{players[0].name} ({players[0].last_game})"
